@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us | Epikong-Bayan Archive</title>
+    <title>Philippine Folk Epics | Epikong-Bayan Archive</title>
     
     <!-- SEO Optimization -->
-    <meta name="description" content="Meet the creators of the Epikong-Bayan digital archive companion. Art Appreciation Group 2 project members and development roles.">
+    <meta name="description" content="Explore the major Philippine folk epics, from the Bicolano legend of Ibalong to the Ilocano classic Biag ni Lam-ang. Learn about the heroic traditions.">
     
     <!-- Tailwind CSS (Direct Import) -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -59,7 +59,7 @@
             width: 100%;
             transform: scaleX(0);
             height: 1px;
-            bottom: -4px;
+            bottom: -2px;
             left: 0;
             background-color: var(--gold);
             transform-origin: bottom right;
@@ -69,34 +69,46 @@
             transform: scaleX(1);
             transform-origin: bottom left;
         }
+        .pulse-dot {
+            animation: pulse-dot-anim 2s infinite;
+        }
+        @keyframes pulse-dot-anim {
+            0% { transform: scale(0.9); opacity: 0.6; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0.6; }
+        }
+        
+        /* Mobile menu slider */
         #mobile-menu {
+            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
             display: none;
-            transition: all 0.3s ease-in-out;
         }
         #mobile-menu.open {
             display: flex;
+            max-height: 500px;
+            opacity: 1;
         }
-        .profile-monogram {
-            background: radial-gradient(circle, #24211a 0%, #100f0d 100%);
-            box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.1), 0 10px 20px rgba(0,0,0,0.5);
+
+        /* Hover card zoom effect */
+        .portal-card {
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s;
         }
-        .team-card {
-            border: 1px solid var(--bronze);
-            background: var(--card);
-            transition: all 0.3s ease;
-        }
-        .team-card:hover {
-            border-color: rgba(212, 175, 55, 0.4);
-            transform: translateY(-5px);
-            box-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.7);
+        .portal-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(212,175,55,0.4);
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col antialiased">
 
     <!-- ═══ HEADER ═══ -->
-    <header id="header" class="sticky top-0 z-50 transition-all duration-300" style="background:rgba(13,12,10,0.85);backdrop-filter:blur(16px);border-bottom:1px solid #332D24;">
+    <header id="header" class="sticky top-0 z-50 transition-all duration-300"
+            style="background:rgba(13,12,10,0.85);backdrop-filter:blur(16px);border-bottom:1px solid #332D24;">
         <div class="max-w-6xl mx-auto px-5 py-3.5 flex justify-between items-center">
+
             <a href="index.html" class="flex items-center gap-3 group">
                 <span class="pulse-dot w-2.5 h-2.5 rounded-full bg-[#8B2626] block"></span>
                 <span class="font-cinzel text-base font-bold tracking-widest text-[#D4AF37] group-hover:text-[#FAF4EC] transition">EPIKONG-BAYAN</span>
@@ -110,7 +122,7 @@
                 
                 <!-- Epics Dropdown -->
                 <div class="relative group inline-block">
-                    <a href="epics.html" class="nav-link flex items-center gap-1.5 focus:outline-none tracking-wider uppercase">
+                    <a href="epics.html" class="nav-link flex items-center gap-1.5 focus:outline-none tracking-wider uppercase text-[#D4AF37]">
                         Epics <span class="text-[8px] transition-transform duration-200 group-hover:rotate-180">&#9660;</span>
                     </a>
                     <div class="absolute left-0 top-full pt-2 w-44 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-200 z-50">
@@ -123,7 +135,7 @@
 
                 <a href="matrix.html" class="nav-link">Matrix</a>
                 <a href="research.html" class="nav-link">Research</a>
-                <a href="about.html" class="nav-link text-[#D4AF37]">About Us</a>
+                <a href="about.html" class="nav-link">About Us</a>
                 <a href="https://docs.google.com/document/d/1IhcXQc-7Jw935bRVZZzaIuoPU66uW-oy9SXhcwQ7Qdw/edit?usp=sharing" target="_blank" class="ml-2 px-4 py-1.5 rounded-lg border border-[#D4AF37]/40 text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black transition text-xs font-bold tracking-widest">DOC &#8599;</a>
             </nav>
 
@@ -136,15 +148,15 @@
 
         <div id="mobile-menu" class="md:hidden flex-col gap-1 pb-4 px-5 border-t border-[#332D24] bg-[#181613]">
             <a href="index.html" class="block py-2.5 text-sm text-[#B8B0A5] hover:text-[#D4AF37] font-semibold tracking-wider uppercase transition">Home</a>
-
+            
             <!-- Epics Mobile Dropdown Group -->
-            <div class="block py-2.5 text-sm text-[#B8B0A5] font-semibold tracking-wider uppercase mt-1">
+            <div class="block py-2.5 text-sm text-[#D4AF37] font-semibold tracking-wider uppercase mt-1">
                 <div class="flex justify-between items-center cursor-pointer hover:text-[#D4AF37] transition" onclick="toggleMobileEpics()">
                     <span>Epics</span>
                     <span id="mobile-epics-arrow" class="text-[10px] transition-transform duration-300">&#9660;</span>
                 </div>
                 <div id="mobile-epics-submenu" class="hidden flex-col pl-4 mt-2 border-l border-[#332D24]">
-                    <a href="epics.html" class="block py-2 text-xs text-[#B8B0A5] hover:text-[#D4AF37] uppercase transition">Overview Portal</a>
+                    <a href="epics.html" class="block py-2 text-xs text-[#FAF4EC] hover:text-[#D4AF37] uppercase transition">Overview Portal</a>
                     <a href="ibalong.html" class="block py-2 text-xs text-[#B8B0A5] hover:text-[#D4AF37] uppercase transition">&mdash; Ibalong</a>
                     <a href="lamang.html" class="block py-2 text-xs text-[#B8B0A5] hover:text-[#D4AF37] uppercase transition">&mdash; Biag ni Lam-ang</a>
                 </div>
@@ -153,108 +165,59 @@
             <a href="gallery.html" class="block py-2.5 text-sm text-[#B8B0A5] hover:text-[#D4AF37] font-semibold tracking-wider uppercase transition">Gallery</a>
             <a href="matrix.html" class="block py-2.5 text-sm text-[#B8B0A5] hover:text-[#D4AF37] font-semibold tracking-wider uppercase transition">Comparative Matrix</a>
             <a href="research.html" class="block py-2.5 text-sm text-[#B8B0A5] hover:text-[#D4AF37] font-semibold tracking-wider uppercase transition">Research Paper</a>
-            <a href="about.html" class="block py-2.5 text-sm text-[#FAF4EC] hover:text-[#D4AF37] font-semibold tracking-wider uppercase transition">About Us</a>
+            <a href="about.html" class="block py-2.5 text-sm text-[#B8B0A5] hover:text-[#D4AF37] font-semibold tracking-wider uppercase transition">About Us</a>
         </div>
     </header>
 
-    <!-- ═══ MAIN SECTION ═══ -->
+    <!-- ═══ HERO BANNER ═══ -->
     <main class="flex-grow py-16 px-6 max-w-6xl mx-auto w-full">
         
         <div class="text-center mb-16">
-            <span class="text-[10px] tracking-[0.25em] text-[#8B2626] font-bold uppercase">Art Appreciation</span>
-            <h1 class="font-cinzel text-4xl md:text-5xl font-black text-[#D4AF37] mt-2 gold-glow uppercase">Meet the Team</h1>
+            <span class="text-[10px] tracking-[0.25em] text-[#8B2626] font-bold uppercase">Heritage Literature</span>
+            <h1 class="font-cinzel text-4xl md:text-5xl font-black text-[#D4AF37] mt-2 gold-glow uppercase">Philippine Folk Epics</h1>
             <div class="w-24 h-0.5 bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent mx-auto mt-4"></div>
-            <p class="text-sm text-[#B8B0A5] mt-4 max-w-lg mx-auto leading-relaxed">
-                We are Group 2, dedicated to documenting and presenting the rich traditional epics of Bicolano and Ilocano heritage.
+            <p class="text-sm text-[#B8B0A5] mt-4 max-w-xl mx-auto leading-relaxed">
+                Explore the foundational narratives of regional oral literature. Our archive profiles the major epic narratives representing the Bicolano and Ilocano cultural heritage.
             </p>
         </div>
 
-        <!-- Team Grid -->
-        <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-16">
+        <!-- Epic Portals Grid -->
+        <div class="grid md:grid-cols-2 gap-8 mb-16">
             
-            <!-- Sherwin Ashton Gascon Babol -->
-            <div class="team-card rounded-2xl p-6 text-center flex flex-col justify-between">
+            <!-- Ibalong Card -->
+            <div class="portal-card bg-[#181613] border border-[#332D24] rounded-2xl overflow-hidden flex flex-col justify-between p-6">
                 <div>
-                    <!-- Portrait Badge Placeholder -->
-                    <div class="profile-monogram w-20 h-20 rounded-full border border-[#D4AF37]/30 flex items-center justify-center mx-auto mb-4">
-                        <span class="font-cinzel text-xl font-bold text-[#D4AF37] tracking-wider">SB</span>
+                    <!-- Portrait Aspect Image -->
+                    <div class="aspect-[16/10] w-full rounded-xl overflow-hidden border border-[#332D24] mb-6">
+                        <img src="assets/ibalong (2).png" alt="Ibalong Epic Illustration" class="w-full h-full object-cover">
                     </div>
-                    <h3 class="font-cinzel text-sm font-bold text-[#FAF4EC] leading-snug">SHERWIN ASHTON GASCON BABOL</h3>
-                    <p class="text-[10px] text-[#D4AF37] font-semibold tracking-wider uppercase mt-1">Printing &amp; Tarpapel Assembly</p>
+                    <span class="text-[9px] font-bold tracking-[0.2em] text-[#8B2626] uppercase">Bicolano Oral Epic</span>
+                    <h2 class="font-cinzel text-2xl font-bold text-[#FAF4EC] mt-1 mb-3">IBALONG</h2>
+                    <p class="text-xs text-[#B8B0A5] leading-relaxed mb-6">
+                        A legendary fragment recounting the mythological origin of the Bicol region. The story revolves around three successive warrior-heroes—Baltog, Handyong, and Bantong—who fought mythical beasts, established the first laws, and cultivated civilization in the ancient lands of Ibalon.
+                    </p>
                 </div>
-                <div class="mt-6 pt-4 border-t border-[#332D24]">
-                    <a href="https://www.facebook.com/share/1MJtoqqy5N/?mibextid=wwXIfr" target="_blank" class="inline-flex items-center gap-1 text-[10px] font-bold tracking-widest text-[#B8B0A5] hover:text-[#D4AF37] uppercase transition">
-                        Facebook &rarr;
-                    </a>
-                </div>
+                <a href="ibalong.html" class="inline-flex items-center justify-center py-3 rounded-xl bg-transparent border border-[#D4AF37]/40 text-[#D4AF37] text-xs font-bold hover:bg-[#D4AF37] hover:text-black uppercase tracking-widest transition">
+                    Explore Epic &rarr;
+                </a>
             </div>
 
-            <!-- Joel Rellora Balon Jr. -->
-            <div class="team-card rounded-2xl p-6 text-center flex flex-col justify-between">
+            <!-- Biag ni Lam-ang Card -->
+            <div class="portal-card bg-[#181613] border border-[#332D24] rounded-2xl overflow-hidden flex flex-col justify-between p-6">
                 <div>
-                    <!-- Portrait Badge Placeholder -->
-                    <div class="profile-monogram w-20 h-20 rounded-full border border-[#D4AF37]/30 flex items-center justify-center mx-auto mb-4">
-                        <span class="font-cinzel text-xl font-bold text-[#D4AF37] tracking-wider">JB</span>
+                    <!-- Portrait Aspect Image -->
+                    <div class="aspect-[16/10] w-full rounded-xl overflow-hidden border border-[#332D24] mb-6">
+                        <img src="assets/lam-ang.png" alt="Biag ni Lam-ang Illustration" class="w-full h-full object-cover">
                     </div>
-                    <h3 class="font-cinzel text-sm font-bold text-[#FAF4EC] leading-snug">JOEL RELLORA BALON JR.</h3>
-                    <p class="text-[10px] text-[#D4AF37] font-semibold tracking-wider uppercase mt-1">Main Researcher &amp; Source Verifier</p>
+                    <span class="text-[9px] font-bold tracking-[0.2em] text-[#8B2626] uppercase">Ilocano Folk Legend</span>
+                    <h2 class="font-cinzel text-2xl font-bold text-[#FAF4EC] mt-1 mb-3">BIAG NI LAM-ANG</h2>
+                    <p class="text-xs text-[#B8B0A5] leading-relaxed mb-6">
+                        Reciting the magical life adventures of the hero Lam-ang of Nalbuan. Born with supernatural speech and physical strength, he sets forth to avenge his father's death against enemies, wins the hand of the beautiful Ines Cannoyan with his magical companions, and triumphs over mortality itself.
+                    </p>
                 </div>
-                <div class="mt-6 pt-4 border-t border-[#332D24]">
-                    <a href="https://www.facebook.com/share/1YZPLVMRZw/?mibextid=wwXIfr" target="_blank" class="inline-flex items-center gap-1 text-[10px] font-bold tracking-widest text-[#B8B0A5] hover:text-[#D4AF37] uppercase transition">
-                        Facebook &rarr;
-                    </a>
-                </div>
-            </div>
-
-            <!-- Shaenet Akia Dolor Binalla -->
-            <div class="team-card rounded-2xl p-6 text-center flex flex-col justify-between">
-                <div>
-                    <!-- Portrait Photo -->
-                    <div class="w-20 h-20 rounded-full border border-[#D4AF37]/30 overflow-hidden mx-auto mb-4">
-                        <img src="assets/binalla.png" alt="Shaenet Akia Dolor Binalla" class="w-full h-full object-cover">
-                    </div>
-                    <h3 class="font-cinzel text-sm font-bold text-[#FAF4EC] leading-snug">SHAENET AKIA DOLOR BINALLA</h3>
-                    <p class="text-[10px] text-[#D4AF37] font-semibold tracking-wider uppercase mt-1">Design &amp; Layout (PPT/Handouts)</p>
-                </div>
-                <div class="mt-6 pt-4 border-t border-[#332D24]">
-                    <a href="https://www.facebook.com/share/191AhG5Ewa/?mibextid=wwXIfr" target="_blank" class="inline-flex items-center gap-1 text-[10px] font-bold tracking-widest text-[#B8B0A5] hover:text-[#D4AF37] uppercase transition">
-                        Facebook &rarr;
-                    </a>
-                </div>
-            </div>
-
-            <!-- Milliscent Claire Dasalla Blanqueza -->
-            <div class="team-card rounded-2xl p-6 text-center flex flex-col justify-between">
-                <div>
-                    <!-- Portrait Photo -->
-                    <div class="w-20 h-20 rounded-full border border-[#D4AF37]/30 overflow-hidden mx-auto mb-4">
-                        <img src="assets/blanqueza.png" alt="Milliscent Claire Dasalla Blanqueza" class="w-full h-full object-cover">
-                    </div>
-                    <h3 class="font-cinzel text-sm font-bold text-[#FAF4EC] leading-snug">MILLISCENT CLAIRE D. BLANQUEZA</h3>
-                    <p class="text-[10px] text-[#D4AF37] font-semibold tracking-wider uppercase mt-1">Content Organizer &amp; Web Integration</p>
-                </div>
-                <div class="mt-6 pt-4 border-t border-[#332D24]">
-                    <a href="https://www.facebook.com/share/19MYA3W2vF/?mibextid=wwXIfr" target="_blank" class="inline-flex items-center gap-1 text-[10px] font-bold tracking-widest text-[#B8B0A5] hover:text-[#D4AF37] uppercase transition">
-                        Facebook &rarr;
-                    </a>
-                </div>
-            </div>
-
-            <!-- Althea Alabat Boletic -->
-            <div class="team-card rounded-2xl p-6 text-center flex flex-col justify-between">
-                <div>
-                    <!-- Portrait Badge Placeholder -->
-                    <div class="profile-monogram w-20 h-20 rounded-full border border-[#D4AF37]/30 flex items-center justify-center mx-auto mb-4">
-                        <span class="font-cinzel text-xl font-bold text-[#D4AF37] tracking-wider">AB</span>
-                    </div>
-                    <h3 class="font-cinzel text-sm font-bold text-[#FAF4EC] leading-snug">ALTHEA ALABAT BOLETIC</h3>
-                    <p class="text-[10px] text-[#D4AF37] font-semibold tracking-wider uppercase mt-1">Presenter &amp; Researcher</p>
-                </div>
-                <div class="mt-6 pt-4 border-t border-[#332D24]">
-                    <a href="https://www.facebook.com/share/1BsSuc1yt3/?mibextid=wwXIfr" target="_blank" class="inline-flex items-center gap-1 text-[10px] font-bold tracking-widest text-[#B8B0A5] hover:text-[#D4AF37] uppercase transition">
-                        Facebook &rarr;
-                    </a>
-                </div>
+                <a href="lamang.html" class="inline-flex items-center justify-center py-3 rounded-xl bg-transparent border border-[#D4AF37]/40 text-[#D4AF37] text-xs font-bold hover:bg-[#D4AF37] hover:text-black uppercase tracking-widest transition">
+                    Explore Epic &rarr;
+                </a>
             </div>
 
         </div>
@@ -279,10 +242,7 @@
         menuToggle.addEventListener('click', function() {
             mobileMenu.classList.toggle('open');
         });
-        mobileMenu.querySelectorAll('a').forEach(function(link) {
-            link.addEventListener('click', function() { mobileMenu.classList.remove('open'); });
-        });
-
+        
         function toggleMobileEpics() {
             var submenu = document.getElementById('mobile-epics-submenu');
             var arrow = document.getElementById('mobile-epics-arrow');

@@ -89,9 +89,9 @@
                 
                 <!-- Epics Dropdown -->
                 <div class="relative group inline-block">
-                    <button class="nav-link flex items-center gap-1.5 focus:outline-none tracking-wider uppercase">
+                    <a href="epics.html" class="nav-link flex items-center gap-1.5 focus:outline-none tracking-wider uppercase">
                         Epics <span class="text-[8px] transition-transform duration-200 group-hover:rotate-180">&#9660;</span>
-                    </button>
+                    </a>
                     <div class="absolute left-0 top-full pt-2 w-44 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-200 z-50">
                         <div class="bg-[#181613] border border-[#332D24] rounded-lg shadow-xl py-1">
                             <a href="ibalong.html" class="block px-4 py-2.5 text-xs text-[#B8B0A5] hover:text-[#D4AF37] hover:bg-[#0D0C0A] transition font-semibold tracking-wider uppercase">Ibalong</a>
@@ -112,16 +112,25 @@
             </button>
         </div>
         <div id="mobile-menu" class="md:hidden flex-col pb-4 px-5 border-t border-[#332D24] bg-[#181613]">
-            <a href="index.html"   class="block py-2.5 text-sm text-[#B8B0A5] hover:text-[#D4AF37] transition">Home</a>
-            
-            <div class="block py-2 text-[10px] font-bold tracking-[0.2em] text-[#8B2626] uppercase mt-2">Epics</div>
-            <a href="ibalong.html" class="block py-2 pl-4 text-sm text-[#B8B0A5] hover:text-[#D4AF37] transition font-semibold tracking-wider uppercase">&mdash; Ibalong</a>
-            <a href="lamang.html"  class="block py-2 pl-4 text-sm text-[#B8B0A5] hover:text-[#D4AF37] transition font-semibold tracking-wider uppercase">&mdash; Biag ni Lam-ang</a>
+            <a href="index.html" class="block py-2.5 text-sm text-[#B8B0A5] hover:text-[#D4AF37] font-semibold tracking-wider uppercase transition">Home</a>
 
-            <a href="gallery.html" class="block py-2.5 text-sm text-[#FAF4EC] hover:text-[#D4AF37] transition">Gallery</a>
-            <a href="matrix.html" class="block py-2.5 text-sm text-[#B8B0A5] hover:text-[#D4AF37] transition">Matrix</a>
-            <a href="research.html" class="block py-2.5 text-sm text-[#B8B0A5] hover:text-[#D4AF37] transition">Research Paper</a>
-            <a href="about.html" class="block py-2.5 text-sm text-[#B8B0A5] hover:text-[#D4AF37] transition">About Us</a>
+            <!-- Epics Mobile Dropdown Group -->
+            <div class="block py-2.5 text-sm text-[#B8B0A5] font-semibold tracking-wider uppercase mt-1">
+                <div class="flex justify-between items-center cursor-pointer hover:text-[#D4AF37] transition" onclick="toggleMobileEpics()">
+                    <span>Epics</span>
+                    <span id="mobile-epics-arrow" class="text-[10px] transition-transform duration-300">&#9660;</span>
+                </div>
+                <div id="mobile-epics-submenu" class="hidden flex-col pl-4 mt-2 border-l border-[#332D24]">
+                    <a href="epics.html" class="block py-2 text-xs text-[#B8B0A5] hover:text-[#D4AF37] uppercase transition">Overview Portal</a>
+                    <a href="ibalong.html" class="block py-2 text-xs text-[#B8B0A5] hover:text-[#D4AF37] uppercase transition">&mdash; Ibalong</a>
+                    <a href="lamang.html" class="block py-2 text-xs text-[#B8B0A5] hover:text-[#D4AF37] uppercase transition">&mdash; Biag ni Lam-ang</a>
+                </div>
+            </div>
+
+            <a href="gallery.html" class="block py-2.5 text-sm text-[#FAF4EC] hover:text-[#D4AF37] font-semibold tracking-wider uppercase transition">Gallery</a>
+            <a href="matrix.html" class="block py-2.5 text-sm text-[#B8B0A5] hover:text-[#D4AF37] font-semibold tracking-wider uppercase transition">Matrix</a>
+            <a href="research.html" class="block py-2.5 text-sm text-[#B8B0A5] hover:text-[#D4AF37] font-semibold tracking-wider uppercase transition">Research Paper</a>
+            <a href="about.html" class="block py-2.5 text-sm text-[#B8B0A5] hover:text-[#D4AF37] font-semibold tracking-wider uppercase transition">About Us</a>
         </div>
     </header>
 
@@ -510,6 +519,20 @@
         document.getElementById('menu-toggle').addEventListener('click', function() {
             document.getElementById('mobile-menu').classList.toggle('open');
         });
+
+        function toggleMobileEpics() {
+            var submenu = document.getElementById('mobile-epics-submenu');
+            var arrow = document.getElementById('mobile-epics-arrow');
+            if (submenu.classList.contains('hidden')) {
+                submenu.classList.remove('hidden');
+                submenu.classList.add('flex');
+                arrow.style.transform = 'rotate(180deg)';
+            } else {
+                submenu.classList.add('hidden');
+                submenu.classList.remove('flex');
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        }
 
         var obs = new IntersectionObserver(function(entries) {
             entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
