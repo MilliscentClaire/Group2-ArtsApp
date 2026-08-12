@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Epikong-Bayan Archive | Art Appreciation Group 2</title>
+    <meta name="description" content="A comparative digital exhibition of Philippine Folk Epics — Ibalong of Bicol and Biag ni Lam-ang of Ilocos. Art Appreciation Group 2 gallery walk digital companion.">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700;900&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --canvas:   #0D0C0A;
+            --card:     #181613;
+            --text-pri: #FAF4EC;
+            --text-sec: #B8B0A5;
+            --gold:     #D4AF37;
+            --bronze:   #332D24;
+            --red:      #8B2626;
+        }
+
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--canvas);
+            color: var(--text-pri);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        ::selection { background: var(--gold); color: #000; }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--canvas); }
+        ::-webkit-scrollbar-thumb { background: var(--bronze); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+        .font-cinzel   { font-family: 'Cinzel', serif; }
+        .font-playfair { font-family: 'Playfair Display', serif; }
+
+        /* GLOW / SPOTLIGHT */
+        .spotlight {
+            background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(212,175,55,0.12) 0%, transparent 70%);
+        }
+        .gold-glow {
+            text-shadow: 0 2px 20px rgba(212,175,55,0.35), 0 0 40px rgba(212,175,55,0.15);
+        }
+        .card-glow {
+            box-shadow: 0 0 0 1px rgba(212,175,55,0), 0 4px 40px rgba(0,0,0,0.6);
+            transition: box-shadow 0.35s ease, border-color 0.35s ease;
+        }
+        .card-glow:hover {
+            box-shadow: 0 0 0 1px rgba(212,175,55,0.25), 0 8px 60px rgba(212,175,55,0.08);
+        }
+
+        /* EPIC NAV CARDS */
+        .epic-nav-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1.25rem;
+            border: 1px solid var(--bronze);
+            background: var(--card);
+            transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+            display: block;
+        }
+        .epic-nav-card:hover {
+            border-color: rgba(212,175,55,0.5);
+            transform: translateY(-4px);
+            box-shadow: 0 16px 60px rgba(212,175,55,0.12);
+        }
+        .epic-nav-card .card-img {
+            width: 100%;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+        .epic-nav-card:hover .card-img { transform: scale(1.04); }
+        .epic-nav-card .card-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(13,12,10,0.92) 40%, rgba(13,12,10,0.2) 100%);
+            pointer-events: none;
+        }
+
+        /* METADATA GRID */
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            padding: 0.85rem;
+            background: rgba(13,12,10,0.6);
+            border: 1px solid var(--bronze);
+            border-radius: 0.75rem;
+        }
+        .meta-label {
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--gold);
+        }
+        .meta-value {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.9rem;
+            color: var(--text-pri);
+        }
+
+        /* PILLAR */
+        .pillar {
+            border-left: 2px solid var(--red);
+            padding: 0.75rem 1rem;
+            background: rgba(13,12,10,0.5);
+            border-radius: 0 0.5rem 0.5rem 0;
+            transition: border-color 0.25s;
+        }
+        .pillar:hover { border-color: var(--gold); }
+
+        /* MATRIX */
+        .matrix-row {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr 1fr;
+            border-bottom: 1px solid var(--bronze);
+        }
+        .matrix-row:last-child { border-bottom: none; }
+        .matrix-cell {
+            padding: 1rem 1.25rem;
+            font-size: 0.875rem;
+            border-right: 1px solid var(--bronze);
+        }
+        .matrix-cell:last-child { border-right: none; }
+        .matrix-row:hover .matrix-cell { background: rgba(212,175,55,0.03); }
+
+        /* ORNAMENT DIVIDER */
+        .ornament {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 0 auto;
+        }
+        .ornament::before,
+        .ornament::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+        }
+        .ornament::before { background: linear-gradient(to right, transparent, var(--bronze)); }
+        .ornament::after  { background: linear-gradient(to left,  transparent, var(--bronze)); }
+
+        /* REVEAL */
+        .reveal {
+            opacity: 1;
+            transform: none;
+        }
+
+        /* GALLERY FRAME */
+        .gallery-frame {
+            position: relative;
+            border: 2px solid rgba(212,175,55,0.25);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            background: #0D0C0A;
+        }
+        .gallery-frame::before {
+            content: '';
+            position: absolute; inset: 0;
+            border: 6px solid rgba(212,175,55,0.06);
+            border-radius: 0.65rem;
+            z-index: 2;
+            pointer-events: none;
+        }
+        .gallery-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+        .gallery-frame:hover img { transform: scale(1.03); }
+
+        /* QR BADGE */
+        .qr-badge {
+            border: 1px solid var(--gold);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--card);
+        }
+
+        /* PULSE */
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50%       { opacity: 0.5; transform: scale(0.8); }
+        }
+        .pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
+
+        /* NAV UNDERLINE */
+        .nav-link {
+            position: relative;
+            transition: color 0.25s;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px; left: 0; right: 0;
+            height: 1px;
+            background: var(--gold);
+            transform: scaleX(0);
+            transition: transform 0.25s ease;
+        }
+        .nav-link:hover::after  { transform: scaleX(1); }
+        .nav-link:hover         { color: var(--gold); }
+
+        /* MOBILE MENU */
+        #mobile-menu          { display: none; }
+        #mobile-menu.open     { display: flex; }
+
+        /* HERO CANVAS */
+        #hero-canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased">
+
+
+    <!-- ═══ HEADER ═══ -->
+    <header id="header" class="sticky top-0 z-50 transition-all duration-300"
+            style="background:rgba(13,12,10,0.85);backdrop-filter:blur(16px);border-bottom:1px solid #332D24;">
+        <div class="max-w-6xl mx-auto px-5 py-3.5 flex justify-between items-center">
+
+            <a href="#" class="flex items-center gap-3 group">
+                <span class="pulse-dot w-2.5 h-2.5 rounded-full bg-[#8B2626] block"></span>
+                <span class="font-cinzel text-base font-bold tracking-widest text-[#D4AF37] group-hover:text-[#FAF4EC] transition">EPIKONG-BAYAN</span>
+                <span class="hidden sm:inline text-[#332D24] font-light text-lg leading-none">|</span>
+                <span class="hidden sm:inline font-cinzel text-xs tracking-[0.15em] text-[#B8B0A5] uppercase">Archive</span>
+            </a>
+
+            <nav class="hidden md:flex items-center gap-7 text-xs font-semibold tracking-wider uppercase text-[#B8B0A5]">
+                <a href="index.html" class="nav-link text-[#D4AF37]">Home</a>
+                <a href="gallery.html" class="nav-link">Gallery</a>
+                
+                <!-- Epics Dropdown -->
+                <div class="relative group inline-block">
+                    <button class="nav-link flex items-center gap-1.5 focus:outline-none tracking-wider uppercase">
+                        Epics <span class="text-[8px] transition-transform duration-200 group-hover:rotate-180">&#9660;</span>
+                    </button>
+                    <div class="absolute left-0 top-full pt-2 w-44 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-200 z-50">
+                        <div class="bg-[#181613] border border-[#332D24] rounded-lg shadow-xl py-1">
+                            <a href="ibalong.html" class="block px-4 py-2.5 text-xs text-[#B8B0A5] hover:text-[#D4AF37] hover:bg-[#0D0C0A] transition font-semibold tracking-wider uppercase">Ibalong</a>
+                            <a href="lamang.html" class="block px-4 py-2.5 text-xs text-[#B8B0A5] hover:text-[#D4AF37] hover:bg-[#0D0C0A] transition font-semibold tracking-wider uppercase">Biag ni Lam-ang</a>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="matrix.html" class="nav-link">Matrix</a>
+                <a href="research.html" class="nav-link">Research</a>
+                <a href="about.html" class="nav-link">About Us</a>
+                <a href="https://docs.google.com/document/d/1IhcXQc-7Jw935bRVZZzaIuoPU66uW-oy9SXhcwQ7Qdw/edit?usp=sharing" target="_blank" class="ml-2 px-4 py-1.5 rounded-lg border border-[#D4AF37]/40 text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black transition text-xs font-bold tracking-widest">DOC &#8599;</a>
+            </nav>
+
+            <button id="menu-toggle" class="md:hidden flex flex-col gap-1.5 p-2 focus:outline-none" aria-label="Toggle menu">
+                <span class="w-5 h-0.5 bg-[#FAF4EC] block"></span>
+                <span class="w-5 h-0.5 bg-[#FAF4EC] block"></span>
+                <span class="w-5 h-0.5 bg-[#FAF4EC] block"></span>
+            </button>
+        </div>
+
+        <div id="mobile-menu" class="md:hidden flex-col gap-1 pb-4 px-5 border-t border-[#332D24] bg-[#181613]">
+            <a href="index.html" class="block py-2.5 text-sm text-[#FAF4EC] hover:text-[#D4AF37] font-semibold tracking-wider uppercase transition">Home</a>
+            <a href="gallery.html" class="block py-2.5 text-sm text-[#B8B0A5] hover:text-[#D4AF37] font-semibold tracking-wider uppercase transition">Gallery</a>
+            <a href="ibalong.html" class="block py-2.5 pl-4 text-xs text-[#B8B0A5] hover:text-[#D4AF37] tracking-wider uppercase transition">&mdash; Ibalong</a>
+            <a href="lamang.html"  class="block py-2.5 pl-4 text-xs text-[#B8B0A5] hover:text-[#D4AF37] tracking-wider uppercase transition">&mdash; Biag ni Lam-ang</a>
+            <a href="matrix.html"  class="block py-2.5 text-sm text-[#B8B0A5] hover:text-[#D4AF37] font-semibold tracking-wider uppercase transition">Comparative Matrix</a>
+            <a href="research.html" class="block py-2.5 text-sm text-[#B8B0A5] hover:text-[#D4AF37] font-semibold tracking-wider uppercase transition">Research Paper</a>
+            <a href="about.html" class="block py-2.5 text-sm text-[#B8B0A5] hover:text-[#D4AF37] font-semibold tracking-wider uppercase transition">About Us</a>
+        </div>
+    </header>
+
+
+    <!-- ═══ HERO SPOTLIGHT ═══ -->
+    <section class="relative overflow-hidden min-h-[88vh] flex flex-col items-center justify-center py-24 px-6 text-center">
+        <canvas id="hero-canvas"></canvas>
+        <div class="spotlight absolute inset-0 -z-10 pointer-events-none"></div>
+
+        <!-- Corner ornaments -->
+        <div class="absolute top-8 left-8  w-12 h-12 border-t-2 border-l-2 border-[#D4AF37]/20"></div>
+        <div class="absolute top-8 right-8 w-12 h-12 border-t-2 border-r-2 border-[#D4AF37]/20"></div>
+        <div class="absolute bottom-8 left-8  w-12 h-12 border-b-2 border-l-2 border-[#D4AF37]/20"></div>
+        <div class="absolute bottom-8 right-8 w-12 h-12 border-b-2 border-r-2 border-[#D4AF37]/20"></div>
+
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest bg-[#181613] text-[#D4AF37] border border-[#D4AF37]/30 uppercase mb-7 reveal">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#8B2626] pulse-dot"></span>
+                Art Appreciation &middot; Gallery Walk Digital Companion &middot; Group 2
+            </div>
+
+            <h1 class="font-cinzel text-4xl sm:text-5xl md:text-7xl font-black text-[#FAF4EC] tracking-wide leading-tight mb-5 reveal gold-glow">
+                BICOL &amp; NORTHERN LUZON<br>
+                <span class="text-[#D4AF37]">EPIC TRADITIONS</span>
+            </h1>
+
+            <p class="font-playfair text-xl md:text-2xl text-[#B8B0A5] max-w-2xl mx-auto mb-4 italic reveal">
+                A comparative digital exhibition of Philippine Folk Epics
+            </p>
+            <p class="text-sm text-[#B8B0A5]/70 max-w-xl mx-auto mb-12 reveal">
+                Examining <em class="text-[#FAF4EC]">Ibalong</em> of the Bicol Region and <em class="text-[#FAF4EC]">Biag ni Lam-ang</em> of Ilocos &mdash;
+                two jewels of pre-colonial Philippine literary heritage.
+            </p>
+
+            <div class="flex flex-wrap justify-center gap-4 reveal">
+                <a href="gallery.html" class="px-7 py-3.5 rounded-xl bg-[#D4AF37] text-black font-bold tracking-wide hover:bg-[#c9a430] transition shadow-lg shadow-[#D4AF37]/25 text-sm">
+                    Explore the Gallery
+                </a>
+                <a href="matrix.html" class="px-7 py-3.5 rounded-xl bg-[#181613] text-[#FAF4EC] border border-[#332D24] font-medium hover:border-[#D4AF37]/50 transition text-sm">
+                    View Comparison
+                </a>
+                <a href="research.html" class="px-7 py-3.5 rounded-xl bg-transparent text-[#D4AF37] border border-[#D4AF37]/30 font-medium hover:bg-[#D4AF37]/10 transition text-sm">
+                    Read Research &#8599;
+                </a>
+            </div>
+
+            <!-- Epic Navigation Cards -->
+            <div class="grid sm:grid-cols-2 gap-5 mt-16 reveal">
+                <a href="ibalong.html" class="bg-[#181613] border border-[#332D24] rounded-2xl p-5 text-left hover:border-[#D4AF37]/40 transition card-glow group">
+                    <div class="flex items-start justify-between mb-3">
+                        <span class="px-2.5 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase bg-[#8B2626]/20 text-[#8B2626] border border-[#8B2626]/30">Bicol Region</span>
+                        <span class="text-[#D4AF37] group-hover:translate-x-1 transition-transform inline-block">&rarr;</span>
+                    </div>
+                    <h3 class="font-cinzel text-lg font-bold text-[#FAF4EC] mb-1.5">Ibalong</h3>
+                    <p class="text-xs text-[#B8B0A5] leading-relaxed">The Bicol folk epic of three heroic ages &mdash; Baltog, Handyong, and Bantong &mdash; civilizing the ancient Ibalong land.</p>
+                    <p class="text-[10px] text-[#D4AF37] font-semibold tracking-widest uppercase mt-3">Read Epic &amp; Research &rarr;</p>
+                </a>
+
+                <a href="lamang.html" class="bg-[#181613] border border-[#332D24] rounded-2xl p-5 text-left hover:border-[#D4AF37]/40 transition card-glow group">
+                    <div class="flex items-start justify-between mb-3">
+                        <span class="px-2.5 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase bg-[#8B2626]/20 text-[#8B2626] border border-[#8B2626]/30">Ilocos Region</span>
+                        <span class="text-[#D4AF37] group-hover:translate-x-1 transition-transform inline-block">&rarr;</span>
+                    </div>
+                    <h3 class="font-cinzel text-lg font-bold text-[#FAF4EC] mb-1.5">Biag ni Lam-ang</h3>
+                    <p class="text-xs text-[#B8B0A5] leading-relaxed">The supernatural life of Lam-ang &mdash; born speaking, slaying enemies, and resurrected by his faithful magical companions.</p>
+                    <p class="text-[10px] text-[#D4AF37] font-semibold tracking-widest uppercase mt-3">Read Epic &amp; Research &rarr;</p>
+                </a>
+            </div>
+        </div>
+
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-[#B8B0A5]/40 text-[10px] tracking-widest uppercase font-semibold">
+            <span>Scroll</span>
+            <div class="w-px h-8 bg-gradient-to-b from-[#B8B0A5]/40 to-transparent"></div>
+        </div>
+    </section>
+
+
+    <!-- ═══ SECTION 2: EPIC GALLERY NAV ═══ -->
+    <section id="showcase" class="py-20 px-6 max-w-6xl mx-auto w-full">
+
+        <div class="text-center mb-12 reveal">
+            <span class="text-[10px] tracking-[0.2em] text-[#8B2626] font-bold uppercase">Philippine Folk Epics</span>
+            <h2 class="font-cinzel text-3xl md:text-4xl font-bold text-[#D4AF37] mt-2 gold-glow">Explore the Epics</h2>
+            <div class="ornament mt-4 max-w-xs mx-auto"><span class="text-[#D4AF37] text-lg">&#10022;</span></div>
+            <p class="text-sm text-[#B8B0A5] mt-3 max-w-lg mx-auto">Click an epic to enter its dedicated archive &mdash; full poem, research analysis, and gallery.</p>
+        </div>
+
+        <!-- Epic Nav Cards -->
+        <div class="grid md:grid-cols-2 gap-6 reveal">
+
+            <!-- Ibalong Card -->
+            <a href="ibalong.html" class="group relative overflow-hidden rounded-2xl border border-[#332D24] hover:border-[#D4AF37]/50 transition-all duration-300 block" style="box-shadow:0 4px 40px rgba(0,0,0,0.6);">
+                <div class="aspect-[16/10] overflow-hidden">
+                    <img src="assets/ibalong (2).png" alt="Ibalong Bicol Folk Epic" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-t from-[#0D0C0A] via-[#0D0C0A]/60 to-transparent"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-[#D4AF37]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-6">
+                    <span class="text-[10px] font-bold tracking-widest uppercase text-[#8B2626]">Bicol Region &middot; Pre-Colonial</span>
+                    <h3 class="font-cinzel text-2xl font-black text-[#FAF4EC] mt-1 mb-2">IBALONG</h3>
+                    <p class="text-xs text-[#B8B0A5] leading-relaxed mb-4">Three heroic ages — Baltog, Handyong, and Bantong — and the civilizing of the ancient Bicol land.</p>
+                    <span class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#D4AF37] text-black text-xs font-bold tracking-wider group-hover:bg-[#c9a430] transition">
+                        Enter Archive <span class="group-hover:translate-x-1 transition-transform inline-block">&rarr;</span>
+                    </span>
+                </div>
+                <div class="absolute top-4 right-4">
+                    <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#181613]/80 text-[#D4AF37] border border-[#D4AF37]/30 backdrop-blur-sm">60 Stanzas</span>
+                </div>
+            </a>
+
+            <!-- Biag ni Lam-ang Card -->
+            <a href="lamang.html" class="group relative overflow-hidden rounded-2xl border border-[#332D24] hover:border-[#D4AF37]/50 transition-all duration-300 block" style="box-shadow:0 4px 40px rgba(0,0,0,0.6);">
+                <div class="aspect-[16/10] overflow-hidden">
+                    <img src="assets/lam-ang.jpg" alt="Biag ni Lam-ang Ilocos Folk Epic" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-t from-[#0D0C0A] via-[#0D0C0A]/60 to-transparent"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-[#D4AF37]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-6">
+                    <span class="text-[10px] font-bold tracking-widest uppercase text-[#8B2626]">Ilocos Region &middot; ~1640 AD</span>
+                    <h3 class="font-cinzel text-2xl font-black text-[#FAF4EC] mt-1 mb-2">BIAG NI LAM-ANG</h3>
+                    <p class="text-xs text-[#B8B0A5] leading-relaxed mb-4">The supernatural life of Lam-ang — born speaking, avenging his father, and resurrected by his companions.</p>
+                    <span class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#D4AF37] text-black text-xs font-bold tracking-wider group-hover:bg-[#c9a430] transition">
+                        Enter Archive <span class="group-hover:translate-x-1 transition-transform inline-block">&rarr;</span>
+                    </span>
+                </div>
+                <div class="absolute top-4 right-4">
+                    <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#181613]/80 text-[#D4AF37] border border-[#D4AF37]/30 backdrop-blur-sm">Ilocano Epic</span>
+                </div>
+            </a>
+
+        </div>
+    </section>
+
+
+    <!-- ═══ SECTION 3: COMPARATIVE MATRIX OVERVIEW ═══ -->
+    <section id="matrix" class="py-20 px-6 max-w-4xl mx-auto w-full text-center">
+        <span class="text-[10px] tracking-[0.2em] text-[#8B2626] font-bold uppercase">Scholarly Comparison</span>
+        <h2 class="font-cinzel text-3xl md:text-4xl font-bold text-[#D4AF37] mt-2 mb-4 gold-glow">Side-by-Side Analysis</h2>
+        <div class="ornament mt-2 max-w-xs mx-auto"><span class="text-[#D4AF37] text-lg">&#10022;</span></div>
+        <p class="text-sm text-[#B8B0A5] mt-4 mb-8 max-w-lg mx-auto leading-relaxed">
+            Examine both epics side-by-side across key dimensions, including origin, heroes, central conflict, values, and preservation methods.
+        </p>
+        <a href="matrix.html" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#181613] text-[#FAF4EC] border border-[#332D24] font-semibold hover:border-[#D4AF37]/50 transition text-sm">
+            View Full Matrix Comparison &rarr;
+        </a>
+    </section>
+
+
+    <!-- ═══ SECTION 4: RESEARCH DOCUMENTATION HUB OVERVIEW ═══ -->
+    <section id="paper" class="py-20 px-6 max-w-4xl mx-auto w-full text-center border-t border-[#332D24]/40">
+        <span class="text-[10px] tracking-[0.2em] text-[#8B2626] font-bold uppercase">Academic Documentation</span>
+        <h2 class="font-cinzel text-3xl md:text-4xl font-bold text-[#D4AF37] mt-2 mb-4 gold-glow">Research &amp; DOC Hub</h2>
+        <div class="ornament mt-2 max-w-xs mx-auto"><span class="text-[#D4AF37] text-lg">&#10022;</span></div>
+        <p class="text-sm text-[#B8B0A5] mt-4 mb-8 max-w-lg mx-auto leading-relaxed">
+            Access the complete, formatted academic study for Art Appreciation, including full translations, literature analysis, and Google Drive document preview.
+        </p>
+        <a href="research.html" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#D4AF37] text-black font-bold hover:bg-[#c9a430] transition text-sm shadow-lg shadow-[#D4AF37]/10">
+            Open Research Documentation Hub &rarr;
+        </a>
+    </section>
+
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer class="mt-auto border-t border-[#332D24] py-14 px-6" style="background:#0D0C0A;">
+        <div class="max-w-5xl mx-auto">
+
+            <div class="grid sm:grid-cols-3 gap-10 mb-10">
+
+                <div>
+                    <p class="font-cinzel font-black text-[#D4AF37] text-base mb-1 tracking-widest">EPIKONG-BAYAN</p>
+                    <p class="font-cinzel text-[10px] text-[#B8B0A5]/60 tracking-widest uppercase mb-3">Digital Archive</p>
+                    <p class="text-xs text-[#B8B0A5] leading-relaxed">
+                        An interactive digital companion for the Gallery Walk activity in Art Appreciation class.
+                        Preserving and presenting the rich oral literary heritage of the Philippines.
+                    </p>
+                </div>
+
+                <div>
+                    <p class="font-cinzel text-xs font-bold tracking-[0.15em] text-[#FAF4EC] uppercase mb-3">Group 2 Members</p>
+                    <ul class="space-y-1.5 text-xs text-[#B8B0A5]">
+                        <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-[#D4AF37]"></span>BABOL, SHERWIN ASHTON GASCON &mdash; Printing &amp; Tarpapel Assembly</li>
+                        <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-[#D4AF37]"></span>BALON JR., JOEL RELLORA &mdash; Main Researcher &amp; Source Verifier</li>
+                        <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-[#D4AF37]"></span>BINALLA, SHAENET AKIA DOLOR &mdash; Design &amp; Layout (PPT/Handouts)</li>
+                        <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-[#D4AF37]"></span>BLANQUEZA, MILLISCENT CLAIRE DASALLA &mdash; Content Organizer &amp; Web Integration</li>
+                        <li class="flex items-center gap-2"><span class="w-1 h-1 rounded-full bg-[#D4AF37]"></span>BOLETIC, ALTHEA ALABAT &mdash; Presenter &amp; Researcher</li>
+                    </ul>
+                </div>
+
+                <div class="flex flex-col gap-4">
+                    <div>
+                        <p class="font-cinzel text-xs font-bold tracking-[0.15em] text-[#FAF4EC] uppercase mb-3">Course Details</p>
+                        <div class="space-y-1 text-xs text-[#B8B0A5]">
+                            <p><span class="text-[#D4AF37] font-semibold">Subject:</span> Art Appreciation</p>
+                            <p><span class="text-[#D4AF37] font-semibold">Group:</span> Group 2</p>
+                            <p><span class="text-[#D4AF37] font-semibold">Activity:</span> Gallery Walk &mdash; Digital Companion</p>
+                            <p><span class="text-[#D4AF37] font-semibold">Epics:</span> Ibalong &amp; Biag ni Lam-ang</p>
+                        </div>
+                    </div>
+
+                    <div class="qr-badge self-start">
+                        <div class="w-20 h-20 bg-[#332D24] rounded-lg flex items-center justify-center border border-[#D4AF37]/20">
+                            <span class="text-3xl">&#9638;</span>
+                        </div>
+                        <p class="text-[10px] text-[#B8B0A5] tracking-widest uppercase">QR Verification</p>
+                        <p class="text-[10px] text-[#D4AF37]/60">Place QR code here</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="border-t border-[#332D24] pt-6 flex flex-col sm:flex-row justify-between items-center gap-3 text-[10px] text-[#B8B0A5]/50 tracking-widest uppercase">
+                <p>&copy; 2026 Group 2 &middot; Art Appreciation &middot; Epikong-Bayan Archive</p>
+                <div class="flex items-center gap-2">
+                    <span class="pulse-dot w-1.5 h-1.5 rounded-full bg-[#8B2626]"></span>
+                    <p>Philippine Folk Epics Digital Exhibition</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- ═══ JAVASCRIPT ═══ -->
+    <script>
+        // ── 1. MOBILE MENU ──
+        var menuToggle = document.getElementById('menu-toggle');
+        var mobileMenu = document.getElementById('mobile-menu');
+        menuToggle.addEventListener('click', function() {
+            mobileMenu.classList.toggle('open');
+        });
+        mobileMenu.querySelectorAll('a').forEach(function(link) {
+            link.addEventListener('click', function() { mobileMenu.classList.remove('open'); });
+        });
+
+        // ── 3. SCROLL REVEAL ──
+        var revealEls = document.querySelectorAll('.reveal');
+        var revealObs = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry, i) {
+                if (entry.isIntersecting) {
+                    setTimeout(function() {
+                        entry.target.classList.add('visible');
+                    }, 80 * i);
+                    revealObs.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12 });
+        revealEls.forEach(function(el) { revealObs.observe(el); });
+
+        // ── 4. HEADER SHADOW ──
+        var header = document.getElementById('header');
+        window.addEventListener('scroll', function() {
+            header.style.boxShadow = window.scrollY > 60
+                ? '0 4px 30px rgba(0,0,0,0.5)'
+                : 'none';
+        });
+
+        // ── 5. FLOATING PARTICLES ──
+        var canvas = document.getElementById('hero-canvas');
+        var ctx    = canvas.getContext('2d');
+        var particles = [];
+
+        function resizeCanvas() {
+            canvas.width  = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+        }
+
+        function Particle() { this.reset(); }
+        Particle.prototype.reset = function() {
+            this.x     = Math.random() * canvas.width;
+            this.y     = Math.random() * canvas.height;
+            this.r     = Math.random() * 1.2 + 0.3;
+            this.alpha = Math.random() * 0.5 + 0.1;
+            this.speed = Math.random() * 0.3 + 0.05;
+            this.dx    = (Math.random() - 0.5) * 0.3;
+            this.dy    = -this.speed;
+        };
+        Particle.prototype.update = function() {
+            this.x += this.dx;
+            this.y += this.dy;
+            this.alpha -= 0.001;
+            if (this.y < -5 || this.alpha <= 0) this.reset();
+        };
+        Particle.prototype.draw = function() {
+            ctx.save();
+            ctx.globalAlpha = Math.max(0, this.alpha);
+            ctx.fillStyle   = '#D4AF37';
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        };
+
+        function initParticles() {
+            particles = [];
+            for (var i = 0; i < 60; i++) {
+                var p = new Particle();
+                p.y = Math.random() * canvas.height;
+                particles.push(p);
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(function(p) { p.update(); p.draw(); });
+            requestAnimationFrame(animateParticles);
+        }
+
+        window.addEventListener('resize', function() { resizeCanvas(); initParticles(); });
+        resizeCanvas();
+        initParticles();
+        animateParticles();
+
+        // ── 6. PDF PLACEHOLDER ──
+        var pdfIframe      = document.getElementById('pdf-iframe');
+        var pdfPlaceholder = document.getElementById('pdf-placeholder');
+        if (!pdfIframe.getAttribute('src')) {
+            pdfIframe.style.display     = 'none';
+            pdfPlaceholder.style.display = 'flex';
+        } else {
+            pdfPlaceholder.style.display = 'none';
+        }
+    </script>
+
+</body>
+</html>

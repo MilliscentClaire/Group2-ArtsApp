@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparative Matrix | Epikong-Bayan Archive</title>
+    <meta name="description" content="Side-by-side comparative matrix of the Ibalong and Biag ni Lam-ang Philippine folk epics.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --canvas:#0D0C0A; --card:#181613; --pri:#FAF4EC; --sec:#B8B0A5; --gold:#D4AF37; --bronze:#332D24; --red:#8B2626; }
+        * { box-sizing:border-box; }
+        body { font-family:'Plus Jakarta Sans',sans-serif; background:var(--canvas); color:var(--pri); -webkit-font-smoothing:antialiased; }
+        ::selection { background:var(--gold); color:#000; }
+        ::-webkit-scrollbar { width:6px; }
+        ::-webkit-scrollbar-track { background:var(--canvas); }
+        ::-webkit-scrollbar-thumb { background:var(--bronze); border-radius:3px; }
+        ::-webkit-scrollbar-thumb:hover { background:var(--gold); }
+        .font-cinzel   { font-family:'Cinzel',serif; }
+        .font-playfair { font-family:'Playfair Display',serif; }
+        .gold-glow { text-shadow:0 2px 20px rgba(212,175,55,.35); }
+        .nav-link { position:relative; transition:color .25s; }
+        .nav-link::after { content:''; position:absolute; bottom:-2px; left:0; right:0; height:1px; background:var(--gold); transform:scaleX(0); transition:transform .25s; }
+        .nav-link:hover::after { transform:scaleX(1); }
+        .nav-link:hover { color:var(--gold); }
+        @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.5;transform:scale(.8);} }
+        .pulse-dot { animation:pulse-dot 2s ease-in-out infinite; }
+        
+        .matrix-row { display: grid; grid-template-columns: 1.2fr 1fr 1fr; border-bottom: 1px solid var(--bronze); }
+        .matrix-row:last-child { border-bottom: none; }
+        .matrix-cell { padding: 1.25rem; font-size: 0.875rem; border-right: 1px solid var(--bronze); }
+        .matrix-cell:last-child { border-right: none; }
+        .matrix-row:hover .matrix-cell { background: rgba(212,175,55,0.03); }
+        #mobile-menu { display:none; }
+        #mobile-menu.open { display:flex; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- HEADER -->
+    <header id="header" class="sticky top-0 z-50 transition-all duration-300" style="background:rgba(13,12,10,0.85);backdrop-filter:blur(16px);border-bottom:1px solid #332D24;">
+        <div class="max-w-6xl mx-auto px-5 py-3.5 flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-3 group">
+                <span class="pulse-dot w-2.5 h-2.5 rounded-full bg-[#8B2626] block"></span>
+                <span class="font-cinzel text-base font-bold tracking-widest text-[#D4AF37] group-hover:text-[#FAF4EC] transition">EPIKONG-BAYAN</span>
+                <span class="hidden sm:inline text-[#332D24] font-light text-lg leading-none">|</span>
+                <span class="hidden sm:inline font-cinzel text-xs tracking-[0.15em] text-[#B8B0A5] uppercase">Archive</span>
+            </a>
+
+            <nav class="hidden md:flex items-center gap-7 text-xs font-semibold tracking-wider uppercase text-[#B8B0A5]">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="gallery.html" class="nav-link">Gallery</a>
+                
+                <!-- Epics Dropdown -->
+                <div class="relative group inline-block">
+                    <button class="nav-link flex items-center gap-1.5 focus:outline-none tracking-wider uppercase">
+                        Epics <span class="text-[8px] transition-transform duration-200 group-hover:rotate-180">&#9660;</span>
+                    </button>
+                    <div class="absolute left-0 top-full pt-2 w-44 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-200 z-50">
+                        <div class="bg-[#181613] border border-[#332D24] rounded-lg shadow-xl py-1">
+                            <a href="ibalong.html" class="block px-4 py-2.5 text-xs text-[#B8B0A5] hover:text-[#D4AF37] hover:bg-[#0D0C0A] transition font-semibold tracking-wider uppercase">Ibalong</a>
+                            <a href="lamang.html" class="block px-4 py-2.5 text-xs text-[#B8B0A5] hover:text-[#D4AF37] hover:bg-[#0D0C0A] transition font-semibold tracking-wider uppercase">Biag ni Lam-ang</a>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="matrix.html" class="nav-link text-[#D4AF37]">Matrix</a>
+                <a href="research.html" class="nav-link">Research</a>
+                <a href="about.html" class="nav-link">About Us</a>
+                <a href="https://docs.google.com/document/d/1IhcXQc-7Jw935bRVZZzaIuoPU66uW-oy9SXhcwQ7Qdw/edit?usp=sharing" target="_blank" class="ml-2 px-4 py-1.5 rounded-lg border border-[#D4AF37]/40 text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black transition text-xs font-bold tracking-widest">DOC &#8599;</a>
+            </nav>
+
+            <button id="menu-toggle" class="md:hidden flex flex-col gap-1.5 p-2 focus:outline-none" aria-label="Toggle menu">
+                <span class="w-5 h-0.5 bg-[#FAF4EC] block"></span>
+                <span class="w-5 h-0.5 bg-[#FAF4EC] block"></span>
+                <span class="w-5 h-0.5 bg-[#FAF4EC] block"></span>
+            </button>
+        </div>
+
+        <div id="mobile-menu" class="md:hidden flex-col gap-1 pb-4 px-5 border-t border-[#332D24] bg-[#181613]">
+            <a href="index.html" class="block py-2.5 text-sm text-[#B8B0A5] hover:text-[#D4AF37] font-semibold tracking-wider uppercase transition">Home</a>
+            <a href="gallery.html" class="block py-2.5 text-sm text-[#B8B0A5] hover:text-[#D4AF37] font-semibold tracking-wider uppercase transition">Gallery</a>
+            <a href="ibalong.html" class="block py-2.5 pl-4 text-xs text-[#B8B0A5] hover:text-[#D4AF37] tracking-wider uppercase transition">&mdash; Ibalong</a>
+            <a href="lamang.html"  class="block py-2.5 pl-4 text-xs text-[#B8B0A5] hover:text-[#D4AF37] tracking-wider uppercase transition">&mdash; Biag ni Lam-ang</a>
+            <a href="matrix.html" class="block py-2.5 text-sm text-[#FAF4EC] hover:text-[#D4AF37] font-semibold tracking-wider uppercase transition">Comparative Matrix</a>
+            <a href="research.html" class="block py-2.5 text-sm text-[#B8B0A5] hover:text-[#D4AF37] font-semibold tracking-wider uppercase transition">Research Paper</a>
+            <a href="about.html" class="block py-2.5 text-sm text-[#B8B0A5] hover:text-[#D4AF37] font-semibold tracking-wider uppercase transition">About Us</a>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <section class="py-16 px-6 max-w-6xl mx-auto w-full flex-grow">
+        <div class="text-center mb-12">
+            <span class="text-[10px] tracking-[0.2em] text-[#8B2626] font-bold uppercase">Scholarly Comparison</span>
+            <h1 class="font-cinzel text-4xl md:text-5xl font-black text-[#D4AF37] mt-2 gold-glow">Side-by-Side Analysis</h1>
+            <div class="ornament mt-4 max-w-xs mx-auto"><span class="text-[#D4AF37] text-lg">&#10022;</span></div>
+            <p class="text-sm text-[#B8B0A5] mt-3 max-w-lg mx-auto">A detailed comparative matrix examining both Luzon epics across key structural, thematic, and preserving dimensions.</p>
+        </div>
+
+        <div class="bg-[#181613] border border-[#332D24] rounded-2xl overflow-hidden shadow-2xl">
+            <!-- Header Row -->
+            <div class="matrix-row bg-[#0D0C0A] border-b border-[#332D24]">
+                <div class="matrix-cell"><p class="font-cinzel text-xs font-bold tracking-widest text-[#D4AF37] uppercase">Dimension</p></div>
+                <div class="matrix-cell text-center">
+                    <p class="font-cinzel text-xs font-bold tracking-widest text-[#FAF4EC] uppercase">Ibalong</p>
+                    <p class="text-[10px] text-[#8B2626] font-semibold tracking-widest uppercase mt-0.5">Bicol Region</p>
+                </div>
+                <div class="matrix-cell text-center">
+                    <p class="font-cinzel text-xs font-bold tracking-widest text-[#FAF4EC] uppercase">Biag ni Lam-ang</p>
+                    <p class="text-[10px] text-[#8B2626] font-semibold tracking-widest uppercase mt-0.5">Ilocos Region</p>
+                </div>
+            </div>
+
+            <div class="matrix-row">
+                <div class="matrix-cell"><p class="text-xs font-bold text-[#D4AF37] uppercase tracking-wider">Geographic Origin</p></div>
+                <div class="matrix-cell text-[#B8B0A5] text-sm">Bicol Peninsula, Southern Luzon</div>
+                <div class="matrix-cell text-[#B8B0A5] text-sm">Ilocos Region, Northern Luzon</div>
+            </div>
+
+            <div class="matrix-row">
+                <div class="matrix-cell"><p class="text-xs font-bold text-[#D4AF37] uppercase tracking-wider">Language &amp; Ethnicity</p></div>
+                <div class="matrix-cell text-[#B8B0A5] text-sm">Bicolano; Bicol People</div>
+                <div class="matrix-cell text-[#B8B0A5] text-sm">Ilocano; Ilocano People</div>
+            </div>
+
+            <div class="matrix-row">
+                <div class="matrix-cell"><p class="text-xs font-bold text-[#D4AF37] uppercase tracking-wider">Hero Profile</p></div>
+                <div class="matrix-cell text-[#B8B0A5] text-sm">Three heroes across epochs: Baltog (conqueror), Handyong (civilizer), Bantong (liberator)</div>
+                <div class="matrix-cell text-[#B8B0A5] text-sm">Single supernatural hero Lam-ang with extraordinary birth, strength, and companions</div>
+            </div>
+
+            <div class="matrix-row">
+                <div class="matrix-cell"><p class="text-xs font-bold text-[#D4AF37] uppercase tracking-wider">Central Conflict</p></div>
+                <div class="matrix-cell text-[#B8B0A5] text-sm">Civilization vs. chaos; heroes subdue mythical monsters (Oryol, Tandayag, Rabot) to build society</div>
+                <div class="matrix-cell text-[#B8B0A5] text-sm">Personal vengeance and love quest; individual hero defying death for honor and family</div>
+            </div>
+
+            <div class="matrix-row">
+                <div class="matrix-cell"><p class="text-xs font-bold text-[#D4AF37] uppercase tracking-wider">Supernatural Elements</p></div>
+                <div class="matrix-cell text-[#B8B0A5] text-sm">Monster creatures (serpents, giant boars, multi-headed animals), natural catastrophes, shapeshifters</div>
+                <div class="matrix-cell text-[#B8B0A5] text-sm">Miraculous birth, speaking animals (rooster &amp; dog), resurrection from the dead, berkakan sea creature</div>
+            </div>
+
+            <div class="matrix-row">
+                <div class="matrix-cell"><p class="text-xs font-bold text-[#D4AF37] uppercase tracking-wider">Core Cultural Values</p></div>
+                <div class="matrix-cell text-[#B8B0A5] text-sm">Communal resilience, environmental stewardship, rule of law, collective civilization-building</div>
+                <div class="matrix-cell text-[#B8B0A5] text-sm">Filial piety, individual heroism, romantic love, loyalty between human and animal companions</div>
+            </div>
+
+            <div class="matrix-row">
+                <div class="matrix-cell"><p class="text-xs font-bold text-[#D4AF37] uppercase tracking-wider">Transmission &amp; Preservation</p></div>
+                <div class="matrix-cell text-[#B8B0A5] text-sm">Oral tradition; recorded by Franciscan friars; rediscovered by Dr. Merito Espinas from a 19th-century manuscript</div>
+                <div class="matrix-cell text-[#B8B0A5] text-sm">First transcribed ~1640 by Pedro Bucaneg; published in 1889 by Isabelo de los Reyes; compiled by Leopoldo Yabes</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-[#332D24] py-8 px-6" style="background:#0D0C0A;">
+        <div class="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-[#B8B0A5]/50 tracking-widest uppercase">
+            <p>&copy; 2026 Group 2 &middot; Art Appreciation &middot; Epikong-Bayan Digital Archive</p>
+            <div class="flex gap-4">
+                <a href="index.html" class="hover:text-[#D4AF37] transition">Home</a>
+                <a href="gallery.html" class="hover:text-[#D4AF37] transition">Gallery</a>
+                <a href="matrix.html" class="hover:text-[#D4AF37] transition">Matrix</a>
+                <a href="research.html" class="hover:text-[#D4AF37] transition">Research</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('open');
+        });
+        window.addEventListener('scroll', function() {
+            document.getElementById('header').style.boxShadow = window.scrollY > 40 ? '0 4px 30px rgba(0,0,0,.5)' : 'none';
+        });
+    </script>
+</body>
+</html>

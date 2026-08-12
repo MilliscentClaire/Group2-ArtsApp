@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biag ni Lam-ang — Ilocos Folk Epic | Epikong-Bayan Archive</title>
+    <meta name="description" content="Biag ni Lam-ang — the Ilocano folk epic of the supernatural hero Lam-ang. Full poem, research, and analysis.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700;900&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --canvas:#0D0C0A; --card:#181613; --pri:#FAF4EC; --sec:#B8B0A5; --gold:#D4AF37; --bronze:#332D24; --red:#8B2626; }
+        * { box-sizing:border-box; }
+        body { font-family:'Plus Jakarta Sans',sans-serif; background:var(--canvas); color:var(--pri); -webkit-font-smoothing:antialiased; }
+        ::selection { background:var(--gold); color:#000; }
+        ::-webkit-scrollbar { width:6px; }
+        ::-webkit-scrollbar-track { background:var(--canvas); }
+        ::-webkit-scrollbar-thumb { background:var(--bronze); border-radius:3px; }
+        ::-webkit-scrollbar-thumb:hover { background:var(--gold); }
+        .font-cinzel   { font-family:'Cinzel',serif; }
+        .font-playfair { font-family:'Playfair Display',serif; }
+        .gold-glow { text-shadow:0 2px 20px rgba(212,175,55,.35),0 0 40px rgba(212,175,55,.15); }
+        .nav-link { position:relative; transition:color .25s; }
+        .nav-link::after { content:''; position:absolute; bottom:-2px; left:0; right:0; height:1px; background:var(--gold); transform:scaleX(0); transition:transform .25s ease; }
+        .nav-link:hover::after { transform:scaleX(1); }
+        .nav-link:hover { color:var(--gold); }
+        @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.5;transform:scale(.8);} }
+        .pulse-dot { animation:pulse-dot 2s ease-in-out infinite; }
+        .reveal { opacity:1; transform:none; }
+        #mobile-menu { display:none; }
+        #mobile-menu.open { display:flex; }
+
+        /* Slide Tabs */
+        .slide-tab {
+            font-family:'Cinzel',serif; font-size:.82rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+            padding:.65rem 2rem; border-radius:.5rem .5rem 0 0; border:1px solid var(--bronze); border-bottom:none;
+            cursor:pointer; background:transparent; color:var(--sec); transition:all .25s; position:relative; bottom:-1px;
+        }
+        .slide-tab.active { background:var(--card); color:var(--gold); border-color:rgba(212,175,55,.5); border-bottom-color:var(--card); box-shadow:inset 0 2px 0 0 var(--gold); }
+        .slide-tab:not(.active):hover { color:var(--gold); }
+        .slide-dot { height:6px; border-radius:3px; border:none; cursor:pointer; transition:width .3s,background .3s; background:var(--bronze); width:10px; }
+        .slide-dot.dot-active { background:var(--gold); width:28px; }
+        /* ── CAROUSEL TO TAB TOGGLE ── */
+        .carousel-track { display: block; }
+        .carousel-slide { display: none; width: 100%; }
+        .carousel-slide.active { display: block; }
+
+        .pillar { border-left:2px solid var(--red); padding:.75rem 1rem; background:rgba(13,12,10,.5); border-radius:0 .5rem .5rem 0; transition:border-color .25s; }
+        .pillar:hover { border-color:var(--gold); }
+        .meta-item { display:flex; flex-direction:column; gap:2px; padding:.85rem; background:rgba(13,12,10,.6); border:1px solid var(--bronze); border-radius:.75rem; }
+        .meta-label { font-size:.65rem; font-weight:600; text-transform:uppercase; letter-spacing:.12em; color:var(--gold); }
+        .meta-value { font-family:'Playfair Display',serif; font-size:.9rem; color:var(--pri); }
+        .ornament { display:flex; align-items:center; gap:1rem; }
+        .ornament::before { content:''; flex:1; height:1px; background:linear-gradient(to right,transparent,var(--bronze)); }
+        .ornament::after  { content:''; flex:1; height:1px; background:linear-gradient(to left,transparent,var(--bronze)); }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- HEADER -->
+    <header id="header" class="sticky top-0 z-50" style="background:rgba(13,12,10,.9);backdrop-filter:blur(16px);border-bottom:1px solid #332D24;">
+        <div class="max-w-6xl mx-auto px-5 py-3.5 flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-3 group">
+                <span class="pulse-dot w-2.5 h-2.5 rounded-full bg-[#8B2626] block"></span>
+                <span class="font-cinzel text-base font-bold tracking-widest text-[#D4AF37] group-hover:text-[#FAF4EC] transition">EPIKONG-BAYAN</span>
+                <span class="hidden sm:inline text-[#332D24] font-light text-lg leading-none">|</span>
+                <span class="hidden sm:inline font-cinzel text-xs tracking-[0.15em] text-[#B8B0A5] uppercase">Archive</span>
+            </a>
+            <nav class="hidden md:flex items-center gap-7 text-xs font-semibold tracking-wider uppercase text-[#B8B0A5]">
+                <a href="index.html"    class="nav-link">Home</a>
+                <a href="gallery.html"  class="nav-link">Gallery</a>
+                
+                <!-- Epics Dropdown -->
+                <div class="relative group inline-block">
+                    <button class="nav-link flex items-center gap-1.5 focus:outline-none tracking-wider uppercase text-[#D4AF37]">
+                        Epics <span class="text-[8px] transition-transform duration-200 group-hover:rotate-180">&#9660;</span>
+                    </button>
+                    <div class="absolute left-0 top-full pt-2 w-44 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-200 z-50">
+                        <div class="bg-[#181613] border border-[#332D24] rounded-lg shadow-xl py-1">
+                            <a href="ibalong.html" class="block px-4 py-2.5 text-xs text-[#B8B0A5] hover:text-[#D4AF37] hover:bg-[#0D0C0A] transition font-semibold tracking-wider uppercase">Ibalong</a>
+                            <a href="lamang.html" class="block px-4 py-2.5 text-xs text-[#D4AF37] hover:text-[#D4AF37] hover:bg-[#0D0C0A] transition font-semibold tracking-wider uppercase">Biag ni Lam-ang</a>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="matrix.html" class="nav-link">Matrix</a>
+                <a href="research.html" class="nav-link">Research</a>
+                <a href="about.html" class="nav-link">About Us</a>
+                <a href="https://docs.google.com/document/d/1IhcXQc-7Jw935bRVZZzaIuoPU66uW-oy9SXhcwQ7Qdw/edit?usp=sharing" target="_blank" class="ml-2 px-4 py-1.5 rounded-lg border border-[#D4AF37]/40 text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black transition text-xs font-bold tracking-widest">DOC &#8599;</a>
+            </nav>
+            <button id="menu-toggle" class="md:hidden flex flex-col gap-1.5 p-2" aria-label="Menu">
+                <span class="w-5 h-0.5 bg-[#FAF4EC] block"></span>
+                <span class="w-5 h-0.5 bg-[#FAF4EC] block"></span>
+                <span class="w-5 h-0.5 bg-[#FAF4EC] block"></span>
+            </button>
+        </div>
+        <div id="mobile-menu" class="md:hidden flex-col pb-4 px-5 border-t border-[#332D24] bg-[#181613]">
+            <a href="index.html"    class="block py-2.5 text-sm text-[#B8B0A5] hover:text-[#D4AF37] transition">Home</a>
+            <a href="gallery.html"  class="block py-2.5 text-sm text-[#B8B0A5] hover:text-[#D4AF37] transition">Gallery</a>
+            <a href="ibalong.html"  class="block py-2.5 pl-4 text-xs text-[#B8B0A5] hover:text-[#D4AF37] transition">&mdash; Ibalong</a>
+            <a href="lamang.html"   class="block py-2.5 pl-4 text-xs text-[#FAF4EC] hover:text-[#D4AF37] transition">&mdash; Biag ni Lam-ang</a>
+            <a href="matrix.html" class="block py-2.5 text-sm text-[#B8B0A5] hover:text-[#D4AF37] transition">Matrix</a>
+            <a href="research.html" class="block py-2.5 text-sm text-[#B8B0A5] hover:text-[#D4AF37] transition">Research Paper</a>
+            <a href="about.html" class="block py-2.5 text-sm text-[#B8B0A5] hover:text-[#D4AF37] transition">About Us</a>
+        </div>
+    </header>
+
+
+    <!-- HERO BANNER -->
+    <section class="relative overflow-hidden py-20 px-6" style="background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(212,175,55,.08) 0%,transparent 70%);">
+        <div class="absolute top-6 left-6 w-10 h-10 border-t-2 border-l-2 border-[#D4AF37]/20"></div>
+        <div class="absolute top-6 right-6 w-10 h-10 border-t-2 border-r-2 border-[#D4AF37]/20"></div>
+
+        <div class="max-w-4xl mx-auto text-center reveal">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[10px] font-bold tracking-[.2em] uppercase bg-[#181613] text-[#8B2626] border border-[#8B2626]/30 mb-6">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#8B2626] pulse-dot"></span>
+                Ilocos Region &middot; Philippine Folk Epic
+            </div>
+
+            <div class="relative mb-8 mx-auto max-w-sm overflow-hidden rounded-2xl border-2 border-[#D4AF37]/25 shadow-2xl">
+                <img src="assets/lam-ang.jpg" alt="Biag ni Lam-ang Ilocos Folk Epic Artwork" class="w-full h-auto block">
+            </div>
+
+            <h1 class="font-cinzel text-4xl md:text-6xl font-black text-[#FAF4EC] tracking-wide leading-tight mb-3 gold-glow">
+                BIAG NI LAM-ANG
+            </h1>
+            <p class="font-playfair italic text-[#D4AF37] text-xl mb-2">Ilocano Folk Epic</p>
+            <p class="text-[#B8B0A5] text-sm max-w-2xl mx-auto leading-relaxed mb-8">
+                A pre-colonial epic of the supernatural hero <span class="text-[#FAF4EC]">Lam-ang</span> &mdash;
+                born speaking from his cradle, avenging his father's death, winning <span class="text-[#FAF4EC]">Ines Kannoyan</span>
+                with his miraculous <span class="text-[#FAF4EC]">rooster and dog</span>, and rising from death itself.
+            </p>
+            <div class="flex flex-wrap justify-center gap-3">
+                <span class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#181613] border border-[#332D24] text-[#B8B0A5]"><span class="text-[#D4AF37]">Region:</span> Ilocos, Northern Luzon</span>
+                <span class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#181613] border border-[#332D24] text-[#B8B0A5]"><span class="text-[#D4AF37]">Transcribed:</span> ~1640 AD</span>
+                <span class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#181613] border border-[#332D24] text-[#B8B0A5]"><span class="text-[#D4AF37]">By:</span> Pedro Bucaneg</span>
+                <span class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#181613] border border-[#332D24] text-[#B8B0A5]"><span class="text-[#D4AF37]">Language:</span> Ilocano</span>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- CAROUSEL SECTION -->
+    <section class="max-w-5xl mx-auto w-full px-4 pb-20 reveal">
+
+        <!-- Tab Bar -->
+        <div class="flex gap-0 pt-6" style="border-bottom:1px solid rgba(212,175,55,.3);">
+            <button class="slide-tab active" data-slide="0">&#127963; The Epic</button>
+            <button class="slide-tab"            data-slide="1">&#128220; The Poem</button>
+            <button class="slide-tab"            data-slide="2">&#128218; Research &amp; Analysis</button>
+        </div>
+
+        <!-- Carousel Wrapper -->
+        <div class="overflow-hidden" style="border:1px solid rgba(212,175,55,.2);border-top:none;border-radius:0 0 1rem 1rem;background:#181613;">
+            <div class="carousel-track" id="carousel-track">
+
+                <!-- SLIDE 1: The Epic Overview -->
+                <div class="carousel-slide active p-6 md:p-10">
+                    <div class="text-center mb-8">
+                        <p class="font-cinzel text-xs text-[#8B2626] tracking-[.2em] uppercase mb-1">Ilocano Folk Epic</p>
+                        <h2 class="font-cinzel text-2xl font-bold text-[#D4AF37] gold-glow">Biag ni Lam-ang</h2>
+                        <p class="font-playfair italic text-[#B8B0A5] text-sm mt-1">"The Life of Lam-ang" &mdash; Historical Summary &amp; Narrative</p>
+                        <div class="ornament mt-4 max-w-xs mx-auto"><span class="text-[#D4AF37]">&#10022;</span></div>
+                    </div>
+
+                    <!-- Overview card -->
+                    <div class="grid lg:grid-cols-2 gap-6 mb-8">
+                        <div>
+                            <p class="font-cinzel text-xs font-bold tracking-[.12em] text-[#D4AF37] uppercase mb-3">Hero Profile</p>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div class="meta-item"><span class="meta-label">Hero</span><span class="meta-value">Lam-ang</span></div>
+                                <div class="meta-item"><span class="meta-label">Origin</span><span class="meta-value">Ilocos Region</span></div>
+                                <div class="meta-item"><span class="meta-label">Transcribed</span><span class="meta-value">~1640 AD</span></div>
+                                <div class="meta-item"><span class="meta-label">Companions</span><span class="meta-value">Rooster &amp; Dog</span></div>
+                                <div class="meta-item col-span-2"><span class="meta-label">Traditional Author</span><span class="meta-value font-sans text-xs text-[#B8B0A5]">Pedro Bucaneg (Father of Ilocano Literature)</span></div>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="font-cinzel text-xs font-bold tracking-[.12em] text-[#D4AF37] uppercase mb-3">Three Narrative Pillars</p>
+                            <div class="flex flex-col gap-2.5">
+                                <div class="pillar">
+                                    <p class="font-semibold text-[#FAF4EC] text-sm mb-0.5">Supernatural Birth</p>
+                                    <p class="text-xs text-[#B8B0A5] leading-relaxed">Lam-ang names himself at birth, speaks immediately, and chooses his own path from the cradle.</p>
+                                </div>
+                                <div class="pillar">
+                                    <p class="font-semibold text-[#FAF4EC] text-sm mb-0.5">Heroic Vengeance</p>
+                                    <p class="text-xs text-[#B8B0A5] leading-relaxed">Sets out to avenge his father's death against the Igorot warriors, carrying protective amulets.</p>
+                                </div>
+                                <div class="pillar">
+                                    <p class="font-semibold text-[#FAF4EC] text-sm mb-0.5">Death &amp; Resurrection</p>
+                                    <p class="text-xs text-[#B8B0A5] leading-relaxed">Devoured by the giant fish berkakan; his bones are gathered and brought back to life by Ines, his rooster, and his dog.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SLIDE 2: The Poem Link -->
+                <div class="carousel-slide p-6 md:p-10">
+                    <div class="text-center mb-8">
+                        <p class="font-cinzel text-xs text-[#8B2626] tracking-[.2em] uppercase mb-1">Epic Verses</p>
+                        <h2 class="font-cinzel text-2xl font-bold text-[#D4AF37] gold-glow">Biag ni Lam-ang Text</h2>
+                        <p class="font-playfair italic text-[#B8B0A5] text-sm mt-1">Read the Epic Poem Online</p>
+                        <div class="ornament mt-4 max-w-xs mx-auto"><span class="text-[#D4AF37]">&#10022;</span></div>
+                    </div>
+
+                    <div class="p-8 rounded-xl bg-[#0D0C0A] border border-[#D4AF37]/20 text-center max-w-lg mx-auto">
+                        <div class="w-14 h-14 rounded-full bg-[#181613] border border-[#D4AF37]/20 flex items-center justify-center mx-auto mb-4 text-2xl">&#128221;</div>
+                        <p class="font-cinzel text-[#D4AF37] font-semibold mb-2">Access Full Text &amp; Translation</p>
+                        <p class="text-xs text-[#B8B0A5] leading-relaxed mb-6">
+                            Since the epic runs to over 300 stanzas, you can read the complete composite text, stanzas, and annotations on the web.
+                        </p>
+                        <a href="https://www.aswangproject.com/biag-ni-lam-ang-ilokano-epic/" target="_blank"
+                           class="inline-block px-5 py-2.5 rounded-lg bg-[#D4AF37] text-black text-xs font-bold hover:bg-[#c9a430] transition uppercase tracking-wider">
+                            Open Online Epic Text &#8599;
+                        </a>
+                    </div>
+                </div>
+
+                <!-- SLIDE 3: Research Details -->
+                <div class="carousel-slide p-6 md:p-10">
+                    <div class="text-center mb-10">
+                        <p class="font-cinzel text-xs text-[#8B2626] tracking-[.2em] uppercase mb-1">Scholarly Analysis</p>
+                        <h2 class="font-cinzel text-2xl font-bold text-[#D4AF37] gold-glow">Research Documentation</h2>
+                        <p class="font-playfair italic text-[#B8B0A5] text-sm mt-1">Biag ni Lam-ang &mdash; Academic Research Paper</p>
+                        <div class="ornament mt-4 max-w-xs mx-auto"><span class="text-[#D4AF37]">&#10022;</span></div>
+                    </div>
+
+                    <div style="border-left: 2px solid rgba(212,175,55,0.25); padding-left: 1.5rem; margin-bottom: 2.5rem;">
+                        <h3 class="font-cinzel text-base font-bold text-[#D4AF37] mb-2">1. Name of the Artwork/Tradition</h3>
+                        <p class="text-sm text-[#B8B0A5] leading-relaxed">
+                            Biag ni Lam-ang ("The Life of Lam-ang") is a Filipino epic poem of the Ilocano people, written in the Iloco (Ilocano) language. It is regarded as the first Philippine folk epic recorded in written form, and is one of only two folk epics documented during the Spanish colonial period &mdash; the other being the Bicolano epic of Handiong (the Ibalon). The composite scholarly version most widely read today runs to 305 stanzas, though multiple variant versions exist (e.g., the Llanes version of 206 stanzas), reflecting the epic's long life as an evolving oral and print tradition.
+                        </p>
+                    </div>
+
+                    <div style="border-left: 2px solid rgba(212,175,55,0.25); padding-left: 1.5rem; margin-bottom: 2.5rem;">
+                        <h3 class="font-cinzel text-base font-bold text-[#D4AF37] mb-2">2. Artist/Practitioner/Community</h3>
+                        <p class="text-sm text-[#B8B0A5] leading-relaxed mb-3">
+                            <strong class="text-[#FAF4EC]">Pedro Bucaneg (Bukaneg) (c. March 1592 &ndash; c. 1630)</strong> is the figure traditionally credited as the epic's author or transcriber, and is honored as the "Father of Ilocano literature." According to tradition, Bucaneg was blind from birth, found as an infant floating in a basket along the Banaoang River between Bantay and Vigan, and raised and educated by Augustinian friars, who taught him Latin and Spanish alongside his native Ilocano and the Isneg language. His documented scholarly achievement was co-authoring, with the Dominican friar Francisco López, the <em>Libro a Naisurátan</em> (1621), the first book ever printed in the Ilocano language. Because Bucaneg was blind, tradition holds that the epic was composed orally and transcribed by an amanuensis (scribe) as he dictated it.
+                        </p>
+                        <p class="text-sm text-[#B8B0A5] leading-relaxed mb-3">
+                            <strong class="text-[#FAF4EC]">Isabelo de los Reyes</strong>, a pioneering Filipino folklorist, is credited with first collecting and publishing a version of the tale in his 1889 work <em>El Folk-Lore Filipino</em>.
+                        </p>
+                        <p class="text-sm text-[#B8B0A5] leading-relaxed mb-3">
+                            <strong class="text-[#FAF4EC]">Leopoldo Y. Yabes</strong> produced the most widely circulated scholarly composite version and English prose translation, published as <em>The Ilocano Epic: A Critical Study of the "Life of Lam-ang"</em>.
+                        </p>
+                        <p class="text-sm text-[#B8B0A5] leading-relaxed">
+                            <strong class="text-[#FAF4EC]">The Ilocano People</strong> of the Ilocos Region broadly are the epic's originating and continuing custodial community bards, farmers, and local storytellers who preserved and reshaped the tale for generations. Historians including H. Otley Beyer, Fay-Cooper Cole, Robert Fox, and Jose R. Calip have supported the epic's genuinely pre-Hispanic origins.
+                        </p>
+                    </div>
+
+                    <div style="border-left: 2px solid rgba(212,175,55,0.25); padding-left: 1.5rem; margin-bottom: 2.5rem;">
+                        <h3 class="font-cinzel text-base font-bold text-[#D4AF37] mb-2">3. Region/Location</h3>
+                        <p class="text-sm text-[#B8B0A5] leading-relaxed mb-2">
+                            The epic is native to the Ilocano people of the <strong class="text-[#FAF4EC]">Ilocos Region (Region I)</strong>, in northwestern Luzon, Philippines. Its narrative setting begins in <strong class="text-[#FAF4EC]">Nalbuan</strong> (La Union). Action extends across:
+                        </p>
+                        <ul class="space-y-1 text-xs text-[#B8B0A5] list-disc pl-5">
+                            <li><strong class="text-[#FAF4EC]">The Igorot highlands / Cordillera country</strong>, where Lam-ang travels to avenge his father.</li>
+                            <li><strong class="text-[#FAF4EC]">Calanutian</strong>, home of Ines Kannoyan, Lam-ang's love interest.</li>
+                            <li><strong class="text-[#FAF4EC]">The Amburayan River</strong>, site of the climactic fishing, death, and resurrection.</li>
+                            <li><strong class="text-[#FAF4EC]">Vigan and Bantay, Ilocos Sur</strong>, associated with Pedro Bucaneg's own life and historical markers.</li>
+                            <li>A bronze statue of Lam-ang subduing a giant crocodile stands today at <strong class="text-[#FAF4EC]">Capurpurawan, Burgos, Ilocos Norte</strong>.</li>
+                        </ul>
+                    </div>
+
+                    <div style="border-left: 2px solid rgba(212,175,55,0.25); padding-left: 1.5rem; margin-bottom: 2.5rem;">
+                        <h3 class="font-cinzel text-base font-bold text-[#D4AF37] mb-2">4. Description</h3>
+                        <p class="text-sm text-[#B8B0A5] leading-relaxed">
+                            Biag ni Lam-ang narrates the extraordinary life of its titular hero from before birth through death and resurrection. Don Juan and Namongan live in Nalbuan. While Namongan is pregnant, Don Juan departs for the mountains to fight the Igorot but does not return. Lam-ang is born displaying miraculous powers &mdash; he can speak immediately after birth and chooses his own name. At only nine months old, he sets out to find his father. Along the way, he defeats Sumarang, kills a nine-headed serpent, and eventually finds his father's severed head displayed by the Igorot. Lam-ang defeats the Igorot warriors in battle.<br><br>
+                            Later, Lam-ang seeks the hand of the beautiful Ines Kannoyan of Calanutian. He defeats suitors, impresses Ines's parents with a lavish dowry of a golden ship, and wins her in marriage. During a customary fishing expedition following the wedding, Lam-ang is swallowed by the giant fish berkakan. His bones are recovered and gathered by Ines, and through the help of his loyal pet rooster and dog, he is miraculously resurrected.
+                        </p>
+                    </div>
+
+                    <div style="border-left: 2px solid rgba(212,175,55,0.25); padding-left: 1.5rem; margin-bottom: 2.5rem;">
+                        <h3 class="font-cinzel text-base font-bold text-[#D4AF37] mb-2">5. Characteristics</h3>
+                        <ul class="space-y-2 text-xs text-[#B8B0A5] list-disc pl-5">
+                            <li><strong class="text-[#FAF4EC]">Genre and form:</strong> An adventure-drama-romance epic poem, composed in quatrain stanzas.</li>
+                            <li><strong class="text-[#FAF4EC]">The miraculous-child motif:</strong> Lam-ang's supernatural birth and precocity match broader East Asian superhero-child traditions like Japan's Kintarō.</li>
+                            <li><strong class="text-[#FAF4EC]">Syncretism:</strong> Notable for originating among a Christianized lowland people, blending pre-colonial animist and Spanish elements.</li>
+                            <li><strong class="text-[#FAF4EC]">Companion animals:</strong> The rooster and dog act as functional characters and agents of his resurrection.</li>
+                            <li><strong class="text-[#FAF4EC]">Oral Performance:</strong> Performed as chanted verse (dallot) rather than read silently.</li>
+                        </ul>
+                    </div>
+
+                    <div style="border-left: 2px solid rgba(212,175,55,0.25); padding-left: 1.5rem; margin-bottom: 2.5rem;">
+                        <h3 class="font-cinzel text-base font-bold text-[#D4AF37] mb-2">6. Cultural Significance</h3>
+                        <ul class="space-y-2 text-xs text-[#B8B0A5] list-disc pl-5">
+                            <li><strong class="text-[#FAF4EC]">A literary first:</strong> First recorded Philippine folk epic in written form.</li>
+                            <li><strong class="text-[#FAF4EC]">Pre-colonial proof:</strong> Preserves traces of early Ilocano social structure, dowry customs, and spiritual beliefs.</li>
+                            <li><strong class="text-[#FAF4EC]">Bucaneg's Legacy:</strong> Links to Bukanegan debate traditions and historical monuments.</li>
+                            <li><strong class="text-[#FAF4EC]">Regional identity:</strong> Celebrated via Capurpurawan public monuments and curriculum integration.</li>
+                        </ul>
+                    </div>
+
+                    <div style="border-left: 2px solid rgba(212,175,55,0.25); padding-left: 1.5rem; margin-bottom: 2.5rem;">
+                        <h3 class="font-cinzel text-base font-bold text-[#D4AF37] mb-2">7. Contribution to Filipino Identity</h3>
+                        <p class="text-sm text-[#B8B0A5] leading-relaxed">
+                            The epic represents a shared national literary heritage taught nationwide. It provides a model of a hybrid, resilient identity that absorbs outside influences while retaining its indigenous core. It champions Filipino values of filial piety, family loyalty, and communal unity (no hero overcomes death alone).
+                        </p>
+                    </div>
+
+                    <div style="border-left: 2px solid rgba(212,175,55,0.25); padding-left: 1.5rem; margin-bottom: 2.5rem;">
+                        <h3 class="font-cinzel text-base font-bold text-[#D4AF37] mb-2">8. Why It Should Be Preserved</h3>
+                        <p class="text-sm text-[#B8B0A5] leading-relaxed">
+                            It is irreplaceable as a historical "first" and preserves endangered pre-colonial cultural knowledge (courtship customs, animist animal agency). Studying the epic preserves the vitality of the Ilocano language.
+                        </p>
+                    </div>
+
+                    <!-- References -->
+                    <div class="mt-8 p-5 rounded-xl bg-[#0D0C0A] border border-[#332D24]">
+                        <p class="font-cinzel text-xs font-bold tracking-[0.15em] text-[#D4AF37] uppercase mb-3">References</p>
+                        <ul class="space-y-1.5 text-xs text-[#B8B0A5]">
+                            <li>Aswang Project. (2026). Biag ni Lam-ang: The Ilokano hero who defied death. <a href="https://www.aswangproject.com/biag-ni-lam-ang-ilokano-epic/" class="ref-link" target="_blank">aswangproject.com</a></li>
+                            <li>de los Reyes, I. (1889). El folk-lore filipino. <a href="https://www.gutenberg.org/ebooks/57550" class="ref-link" target="_blank">gutenberg.org</a></li>
+                            <li>Manuel, E. A. (1963). A survey of Philippine folk epics. <em>Asian Folklore Studies</em>.</li>
+                            <li>Yabes, L. Y. (1935). <em>The Ilocano epic: A critical study of the "Life of Lam-ang"</em>. University of the Philippines.</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Dots -->
+        <div class="flex justify-center gap-2 mt-5">
+            <button class="slide-dot dot-active" data-slide="0"></button>
+            <button class="slide-dot"            data-slide="1"></button>
+            <button class="slide-dot"            data-slide="2"></button>
+        </div>
+    </section>
+
+
+    <!-- FOOTER -->
+    <footer class="mt-auto border-t border-[#332D24] py-8 px-6" style="background:#0D0C0A;">
+        <div class="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-[#B8B0A5]/50 tracking-widest uppercase">
+            <a href="index.html" class="font-cinzel text-[#D4AF37] hover:text-[#FAF4EC] transition tracking-widest text-xs">&#8592; Back to Archive Home</a>
+            <p>&copy; 2026 Group 2 &middot; Art Appreciation &middot; Biag ni Lam-ang Archive</p>
+            <div class="flex gap-4">
+                <a href="gallery.html" class="hover:text-[#D4AF37] transition">Gallery</a>
+                <a href="ibalong.html" class="hover:text-[#D4AF37] transition">Ibalong</a>
+                <a href="index.html#matrix" class="hover:text-[#D4AF37] transition">Matrix</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        var track = document.getElementById('carousel-track');
+        var tabs  = document.querySelectorAll('.slide-tab');
+        var dots  = document.querySelectorAll('.slide-dot');
+
+        function goToSlide(idx) {
+            document.querySelectorAll('.carousel-slide').forEach(function(slide, i) {
+                slide.classList.toggle('active', i === idx);
+            });
+            tabs.forEach(function(t, i) { t.classList.toggle('active', i === idx); });
+            dots.forEach(function(d, i) { d.classList.toggle('dot-active', i === idx); });
+        }
+
+        tabs.forEach(function(btn, i) { btn.addEventListener('click', function() { goToSlide(i); }); });
+        dots.forEach(function(dot, i) { dot.addEventListener('click', function() { goToSlide(i); }); });
+
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('open');
+        });
+
+        var obs = new IntersectionObserver(function(entries) {
+            entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+
+        window.addEventListener('scroll', function() {
+            document.getElementById('header').style.boxShadow = window.scrollY > 40 ? '0 4px 30px rgba(0,0,0,.5)' : 'none';
+        });
+    </script>
+</body>
+</html>

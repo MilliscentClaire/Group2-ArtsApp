@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ibalong — Bicol Folk Epic | Epikong-Bayan Archive</title>
+    <meta name="description" content="The Ibalong — a 60-stanza Bicolano folk epic featuring heroes Baltog, Handyong, and Bantong. Full poem, translation, and complete research analysis.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700;900&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --canvas: #0D0C0A;
+            --card:   #181613;
+            --pri:    #FAF4EC;
+            --sec:    #B8B0A5;
+            --gold:   #D4AF37;
+            --bronze: #332D24;
+            --red:    #8B2626;
+        }
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--canvas);
+            color: var(--pri);
+            -webkit-font-smoothing: antialiased;
+        }
+        ::selection { background: var(--gold); color: #000; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--canvas); }
+        ::-webkit-scrollbar-thumb { background: var(--bronze); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+        .font-cinzel   { font-family: 'Cinzel', serif; }
+        .font-playfair { font-family: 'Playfair Display', serif; }
+        .gold-glow { text-shadow: 0 2px 20px rgba(212,175,55,0.35), 0 0 40px rgba(212,175,55,0.15); }
+        .nav-link { position: relative; transition: color 0.25s; }
+        .nav-link::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 1px; background: var(--gold); transform: scaleX(0); transition: transform 0.25s ease; }
+        .nav-link:hover::after { transform: scaleX(1); }
+        .nav-link:hover { color: var(--gold); }
+        @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.5;transform:scale(.8);} }
+        .pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
+
+        /* ── SLIDE TABS ── */
+        .slide-tab {
+            font-family: 'Cinzel', serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 0.65rem 2rem;
+            border-radius: 0.5rem 0.5rem 0 0;
+            border: 1px solid var(--bronze);
+            border-bottom: none;
+            cursor: pointer;
+            background: transparent;
+            color: var(--sec);
+            transition: all 0.25s;
+            position: relative;
+            bottom: -1px;
+        }
+        .slide-tab.active {
+            background: var(--card);
+            color: var(--gold);
+            border-color: rgba(212,175,55,0.5);
+            border-bottom-color: var(--card);
+            box-shadow: inset 0 2px 0 0 var(--gold);
+        }
+        .slide-tab:not(.active):hover { color: var(--gold); border-color: rgba(212,175,55,0.3); }
+
+        /* ── SLIDE DOTS ── */
+        .slide-dot {
+            height: 6px;
+            border-radius: 3px;
+            border: none;
+            cursor: pointer;
+            transition: width 0.3s, background 0.3s;
+            background: var(--bronze);
+            width: 10px;
+        }
+        .slide-dot.dot-active {
+            background: var(--gold);
+            width: 28px;
+        }
+
+        /* ── CAROUSEL TO TAB TOGGLE ── */
+        .carousel-track {
+            display: block;
+        }
+        /* ── METADATA & NARRATIVE PILLARS ── */
+        .pillar { border-left:2px solid var(--red); padding:.75rem 1rem; background:rgba(13,12,10,.5); border-radius:0 .5rem .5rem 0; transition:border-color .25s; }
+        .pillar:hover { border-color:var(--gold); }
+        .meta-item { display:flex; flex-direction:column; gap:2px; padding:.85rem; background:rgba(13,12,10,.6); border:1px solid var(--bronze); border-radius:.75rem; }
+        .meta-label { font-size:.65rem; font-weight:600; text-transform:uppercase; letter-spacing:.12em; color:var(--gold); }
+        .meta-value { font-family:'Playfair Display',serif; font-size:.9rem; color:var(--pri); }
+
+        .carousel-slide {
+            display: none;
+            width: 100%;
+        }
+        .carousel-slide.active {
+            display: block;
+        }
+
+        /* ── STANZA LAYOUT ── */
+        .stanza-block {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid rgba(51,45,36,0.6);
+        }
+        .stanza-block:last-child { border-bottom: none; }
+        .stanza-num {
+            font-family: 'Cinzel', serif;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            color: var(--gold);
+            text-transform: uppercase;
+            margin-bottom: 0.4rem;
+        }
+        .stanza-spanish {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 0.925rem;
+            color: var(--sec);
+            line-height: 1.9;
+        }
+        .stanza-english {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.9rem;
+            color: var(--pri);
+            line-height: 1.9;
+        }
+        .section-header-stanza {
+            font-family: 'Cinzel', serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--red);
+            background: linear-gradient(to right, rgba(139,38,38,0.12), transparent);
+            padding: 0.6rem 1rem;
+            border-left: 3px solid var(--red);
+            margin: 2rem 0 0.5rem;
+        }
+
+        /* ── RESEARCH SECTIONS ── */
+        .research-section {
+            border-left: 2px solid rgba(212,175,55,0.25);
+            padding-left: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        .research-h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+        .research-h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--pri);
+            margin: 1.25rem 0 0.5rem;
+        }
+        .research-p {
+            font-size: 0.925rem;
+            line-height: 1.85;
+            color: var(--sec);
+            margin-bottom: 0.75rem;
+        }
+        .research-li {
+            font-size: 0.9rem;
+            line-height: 1.75;
+            color: var(--sec);
+            padding-left: 1rem;
+            position: relative;
+            margin-bottom: 0.35rem;
+        }
+        .research-li::before { content: '▸'; position: absolute; left: 0; color: var(--gold); font-size: 0.65rem; top: 0.35rem; }
+        .ref-link { color: var(--gold); text-decoration: underline; font-size: 0.8rem; word-break: break-all; }
+
+        /* ── REVEAL ── */
+        .reveal { opacity: 1; transform: none; }
+
+        /* ── MOBILE MENU ── */
+        #mobile-menu { display: none; }
+        #mobile-menu.open { display: flex; }
+
+        /* ── ORNAMENT ── */
+        .ornament { display: flex; align-items: center; gap: 1rem; }
+        .ornament::before { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, transparent, var(--bronze)); }
+        .ornament::after  { content: ''; flex: 1; height: 1px; background: linear-gradient(to left,  transparent, var(--bronze)); }
+
+        @media (max-width: 640px) {
+            .stanza-block { grid-template-columns: 1fr; gap: 0.75rem; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- ═══ HEADER ═══ -->
+    <header id="header" class="sticky top-0 z-50" style="background:rgba(13,12,10,0.9);backdrop-filter:blur(16px);border-bottom:1px solid #332D24;">
+        <div class="max-w-6xl mx-auto px-5 py-3.5 flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-3 group">
+                <span class="pulse-dot w-2.5 h-2.5 rounded-full bg-[#8B2626] block"></span>
+                <span class="font-cinzel text-base font-bold tracking-widest text-[#D4AF37] group-hover:text-[#FAF4EC] transition">EPIKONG-BAYAN</span>
+                <span class="hidden sm:inline text-[#332D24] font-light text-lg leading-none">|</span>
+                <span class="hidden sm:inline font-cinzel text-xs tracking-[0.15em] text-[#B8B0A5] uppercase">Archive</span>
+            </a>
+            <nav class="hidden md:flex items-center gap-7 text-xs font-semibold tracking-wider uppercase text-[#B8B0A5]">
+                <a href="index.html"    class="nav-link">Home</a>
+                <a href="gallery.html"  class="nav-link">Gallery</a>
+                
+                <!-- Epics Dropdown -->
+                <div class="relative group inline-block">
+                    <button class="nav-link flex items-center gap-1.5 focus:outline-none tracking-wider uppercase text-[#D4AF37]">
+                        Epics <span class="text-[8px] transition-transform duration-200 group-hover:rotate-180">&#9660;</span>
+                    </button>
+                    <div class="absolute left-0 top-full pt-2 w-44 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-200 z-50">
+                        <div class="bg-[#181613] border border-[#332D24] rounded-lg shadow-xl py-1">
+                            <a href="ibalong.html" class="block px-4 py-2.5 text-xs text-[#D4AF37] hover:text-[#D4AF37] hover:bg-[#0D0C0A] transition font-semibold tracking-wider uppercase">Ibalong</a>
+                            <a href="lamang.html" class="block px-4 py-2.5 text-xs text-[#B8B0A5] hover:text-[#D4AF37] hover:bg-[#0D0C0A] transition font-semibold tracking-wider uppercase">Biag ni Lam-ang</a>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="matrix.html" class="nav-link">Matrix</a>
+                <a href="research.html" class="nav-link">Research</a>
+                <a href="about.html" class="nav-link">About Us</a>
+                <a href="https://docs.google.com/document/d/1IhcXQc-7Jw935bRVZZzaIuoPU66uW-oy9SXhcwQ7Qdw/edit?usp=sharing" target="_blank" class="ml-2 px-4 py-1.5 rounded-lg border border-[#D4AF37]/40 text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black transition text-xs font-bold tracking-widest">DOC &#8599;</a>
+            </nav>
+            <button id="menu-toggle" class="md:hidden flex flex-col gap-1.5 p-2" aria-label="Menu">
+                <span class="w-5 h-0.5 bg-[#FAF4EC] block"></span>
+                <span class="w-5 h-0.5 bg-[#FAF4EC] block"></span>
+                <span class="w-5 h-0.5 bg-[#FAF4EC] block"></span>
+            </button>
+        </div>
+        <div id="mobile-menu" class="md:hidden flex-col pb-4 px-5 border-t border-[#332D24] bg-[#181613]">
+            <a href="index.html"    class="block py-2.5 text-sm text-[#B8B0A5] hover:text-[#D4AF37] transition">Home</a>
+            <a href="gallery.html"  class="block py-2.5 text-sm text-[#B8B0A5] hover:text-[#D4AF37] transition">Gallery</a>
+            <a href="ibalong.html"  class="block py-2.5 pl-4 text-xs text-[#FAF4EC] hover:text-[#D4AF37] transition">&mdash; Ibalong</a>
+            <a href="lamang.html"   class="block py-2.5 pl-4 text-xs text-[#B8B0A5] hover:text-[#D4AF37] transition">&mdash; Biag ni Lam-ang</a>
+            <a href="matrix.html" class="block py-2.5 text-sm text-[#B8B0A5] hover:text-[#D4AF37] transition">Matrix</a>
+            <a href="research.html" class="block py-2.5 text-sm text-[#B8B0A5] hover:text-[#D4AF37] transition">Research Paper</a>
+            <a href="about.html" class="block py-2.5 text-sm text-[#B8B0A5] hover:text-[#D4AF37] transition">About Us</a>
+        </div>
+    </header>
+
+
+    <!-- ═══ HERO BANNER ═══ -->
+    <section class="relative overflow-hidden py-20 px-6" style="background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(212,175,55,0.08) 0%, transparent 70%);">
+        <div class="absolute top-6 left-6 w-10 h-10 border-t-2 border-l-2 border-[#D4AF37]/20"></div>
+        <div class="absolute top-6 right-6 w-10 h-10 border-t-2 border-r-2 border-[#D4AF37]/20"></div>
+
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[10px] font-bold tracking-[0.2em] uppercase bg-[#181613] text-[#8B2626] border border-[#8B2626]/30 mb-6">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#8B2626] pulse-dot"></span>
+                Bicol Region &middot; Philippine Folk Epic
+            </div>
+
+            <div class="relative mb-8 mx-auto max-w-sm overflow-hidden rounded-2xl border-2 border-[#D4AF37]/25 shadow-2xl">
+                <img src="assets/ibalong (2).png" alt="Ibalong Bicol Folk Epic Artwork" class="w-full h-auto block">
+            </div>
+
+            <h1 class="font-cinzel text-5xl md:text-7xl font-black text-[#FAF4EC] tracking-wide leading-tight mb-3 gold-glow">
+                IBALONG
+            </h1>
+            <p class="font-playfair italic text-[#D4AF37] text-xl mb-2">Bicol Folk Epic</p>
+            <p class="text-[#B8B0A5] text-sm max-w-2xl mx-auto leading-relaxed mb-8">
+                A 60-stanza fragment of the foundational Bicolano oral epic &mdash; recounting the heroic ages of
+                <span class="text-[#FAF4EC]">Baltog</span>, <span class="text-[#FAF4EC]">Handyong</span>, and <span class="text-[#FAF4EC]">Bantong</span>
+                as they civilize the ancient land of Ibalong against mythical monsters, floods, and volcanic catastrophe.
+            </p>
+
+            <!-- Metadata Pills -->
+            <div class="flex flex-wrap justify-center gap-3">
+                <span class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#181613] border border-[#332D24] text-[#B8B0A5]"><span class="text-[#D4AF37]">Region:</span> Bicol, Southern Luzon</span>
+                <span class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#181613] border border-[#332D24] text-[#B8B0A5]"><span class="text-[#D4AF37]">Era:</span> Pre-Colonial</span>
+                <span class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#181613] border border-[#332D24] text-[#B8B0A5]"><span class="text-[#D4AF37]">Transcribed:</span> 19th Century</span>
+                <span class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#181613] border border-[#332D24] text-[#B8B0A5]"><span class="text-[#D4AF37]">Language:</span> Spanish (originally Bicolano)</span>
+                <span class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#181613] border border-[#332D24] text-[#B8B0A5]"><span class="text-[#D4AF37]">Stanzas:</span> 60 (surviving fragment)</span>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ═══ CAROUSEL SECTION ═══ -->
+    <section class="max-w-5xl mx-auto w-full px-4 pb-20">
+
+        <!-- Tab Bar -->
+        <div class="flex gap-0 pt-6" id="slide-tabs" style="border-bottom: 1px solid rgba(212,175,55,0.3);">
+            <button class="slide-tab active" data-slide="0" id="tab-epic">
+                &#127963; The Epic
+            </button>
+            <button class="slide-tab" data-slide="1" id="tab-poem">
+                &#128220; The Poem
+            </button>
+            <button class="slide-tab" data-slide="2" id="tab-research">
+                &#128218; Research &amp; Analysis
+            </button>
+        </div>
+
+        <!-- Carousel Wrapper -->
+        <div class="overflow-hidden" style="border: 1px solid rgba(212,175,55,0.2); border-top: none; border-radius: 0 0 1rem 1rem; background: #181613;">
+            <div class="carousel-track" id="carousel-track">
+
+                <!-- ══════════════════════════════════
+                     SLIDE 1: THE EPIC SUMMARY
+                ══════════════════════════════════ -->
+                <div class="carousel-slide active p-6 md:p-10" id="slide-0">
+                    <div class="text-center mb-8">
+                        <p class="font-cinzel text-xs text-[#8B2626] tracking-[.2em] uppercase mb-1">Bicolano Folk Epic</p>
+                        <h2 class="font-cinzel text-2xl font-bold text-[#D4AF37] gold-glow">Ibalong Summary</h2>
+                        <p class="font-playfair italic text-[#B8B0A5] text-sm mt-1">"The Epic of Bicolandia" &mdash; Historical Summary &amp; Narrative</p>
+                        <div class="ornament mt-4 max-w-xs mx-auto"><span class="text-[#D4AF37]">&#10022;</span></div>
+                    </div>
+
+                    <div class="grid lg:grid-cols-2 gap-6 mb-8">
+                        <div>
+                            <p class="font-cinzel text-xs font-bold tracking-[.12em] text-[#D4AF37] uppercase mb-3">Hero Profile</p>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div class="meta-item"><span class="meta-label">Heroes</span><span class="meta-value text-xs">Baltog, Handyong, Bantong</span></div>
+                                <div class="meta-item"><span class="meta-label">Origin</span><span class="meta-value">Bicol Region</span></div>
+                                <div class="meta-item"><span class="meta-label">Transcribed</span><span class="meta-value">19th Century</span></div>
+                                <div class="meta-item"><span class="meta-label">Companions</span><span class="meta-value">Bicolano Warriors</span></div>
+                                <div class="meta-item col-span-2"><span class="meta-label">Source Bard</span><span class="meta-value font-sans text-xs text-[#B8B0A5]">Kadunung (as recorded by Spanish friars)</span></div>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="font-cinzel text-xs font-bold tracking-[.12em] text-[#D4AF37] uppercase mb-3">Three Narrative Pillars</p>
+                            <div class="flex flex-col gap-2.5">
+                                <div class="pillar">
+                                    <p class="font-semibold text-[#FAF4EC] text-sm mb-0.5">The Hero Baltog</p>
+                                    <p class="text-xs text-[#B8B0A5] leading-relaxed">The first hero of Ibalong, who clears the land, kills the giant boar Tandayag, and introduces agriculture.</p>
+                                </div>
+                                <div class="pillar">
+                                    <p class="font-semibold text-[#FAF4EC] text-sm mb-0.5">Handyong &amp; Civilization</p>
+                                    <p class="text-xs text-[#B8B0A5] leading-relaxed">Defeats a multitude of wild beasts, creates laws, invents tools, and civilizes Ibalong with the aid of the shapeshifting serpent Oryol.</p>
+                                </div>
+                                <div class="pillar">
+                                    <p class="font-semibold text-[#FAF4EC] text-sm mb-0.5">Bantong &amp; Rabot</p>
+                                    <p class="text-xs text-[#B8B0A5] leading-relaxed">The third hero, who slays the petrifying half-man, half-beast monster Rabot, restoring safety and peace to the realm.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ══════════════════════════════════
+                     SLIDE 2: THE POEM
+                ══════════════════════════════════ -->
+                <div class="carousel-slide p-6 md:p-10" id="slide-1">
+
+                    <div class="text-center mb-8">
+                        <p class="font-cinzel text-xs text-[#8B2626] tracking-[0.2em] uppercase mb-1">Bicolano Folk Epic &middot; 60 Stanzas</p>
+                        <h2 class="font-cinzel text-2xl font-bold text-[#D4AF37] gold-glow">Handiong: Epic of Bicolandia</h2>
+                        <p class="font-playfair italic text-[#B8B0A5] text-sm mt-1">As translated by Luis G. Dato (1965)</p>
+                        <div class="ornament mt-4 max-w-xs mx-auto"><span class="text-[#D4AF37]">&#10022;</span></div>
+                        <p class="text-xs text-[#B8B0A5]/60 mt-3">Spanish original on the left &middot; English translation on the right</p>
+                    </div>
+
+                    <!-- ── Framing Stanzas 1–6 ── -->
+                    <div class="section-header-stanza">The Request &mdash; Kadugnung to Yling (Iling)</div>
+
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 1</div><div class="stanza-spanish">Cuenta, Cadugñung la historia<br>Delos tiempos de Handiong<br>Con esa lira de plate<br>Dulce encanto de Aslon.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">Cadungung, kindly narrate to us,<br>Historic times of great Handyong,<br>Sing with your lyre of silver tone<br>The sweet enchantment of Aslong.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 2</div><div class="stanza-spanish">Que solo cantar tu puedes<br>Tanta belleza y primor<br>Tantos ocultos misterios<br>Como encierra esta region</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">For only you can put in song<br>Such beauty and renown that bring<br>The mysteries that now enshroud<br>This glorious land of long ago.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 3</div><div class="stanza-spanish">Canta, y dinos su reyes<br>La prosapia y valor<br>La guerra, que sostuvieron<br>Hasta vencer a la Oriol.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">Sing, then, and tell us of its kings,<br>Their proud past and their valiant role<br>In war which they fought snake Oryol<br>Until they had defeated and its fall.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 4</div><div class="stanza-spanish">Dinos tambien por tu vida<br>La historia del viejo Asog<br>La del joven Masaraga,<br>La del vetusto Isarog.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">Do tell us also all about<br>The life of the old Asog,<br>Of the still young Masaraga,<br>And ancient moss-covered Isarog.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 5</div><div class="stanza-spanish">Que tu fuiste el tierno vate<br>El mas dulce seductor<br>De cuantas vieron el lago<br>Que a la Tacay sepulto.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">As tender bard enticing high<br>Seducer sweetest that is why<br>Among those who had seen the lake<br>In which was buried Fair Takay.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 6</div><div class="stanza-spanish">Canta, pues antentos todos<br>A tu hermosa narracion<br>Sentados aqui nos tienes<br>A la sombra de un daod.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">Then, sing to us now you are free<br>We shall listen to lovely song attentively<br>Out in the shade, right where we sit,<br>Here underneath the Dao Tree.</div></div>
+                    </div>
+
+                    <!-- ── Kadunung's Reply ── -->
+                    <div class="section-header-stanza">Kadunung Responds</div>
+
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 7</div><div class="stanza-spanish">Oid pues, hijos del Bicol.<br>Dijo Cadugῆung veluz,<br>Los hechos del viejo suelo<br>Patria hermosa de Handiong.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">You Sons of Bicol, listen then,<br>Responded quickly Cadungung,<br>To the great deeds in this old clime,<br>This beautiful land of king Handyong.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 8</div><div class="stanza-spanish">Es el Bicol una tierra<br>Llana, feraz, de aluvion;<br>Del mundo la mas hermosa,<br>La mas rica en produccion.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">The Kabikolan is a realm<br>With fertile fields of wide plains,<br>Fairest in the World, that nature gives,<br>The richest in what planting yields.</div></div>
+                    </div>
+
+                    <!-- ── Baltog ── -->
+                    <div class="section-header-stanza">Baltog &mdash; The First Bicol Hero</div>
+
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 9</div><div class="stanza-spanish">Fue Baltog el primer hombre<br>Que esta tierra habito.<br>Oriundo de Botavara,<br>De la raza de Lipod.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">Baltog was the first hero known<br>Who pioneered this lovely place,<br>He was of Botavara land<br>His birth Lipod, which was his race.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 10</div><div class="stanza-spanish">Al Bicol llego siguiendo<br>Un jabali muy feroz,<br>Que sus sembrados de linza<br>Una noche destruyo.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">Arriving Bicol he did scour<br>Because of great fiercest boar<br>Destroyed his linsa plants one night<br>And he pursued it furiously.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 11</div><div class="stanza-spanish">Cuando le tuvo acostado<br>Al suelo tiro en lanzon,<br>Y con sus brazos herculeos<br>Las quijadas le partio.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">Baltog then downed the hunted game<br>Without his thrown lance, he just came<br>When he had cornered it, in combat fair<br>Herculean arms he broke its jaws.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 12</div><div class="stanza-spanish">Cada quijada tenfa<br>Una vara de largor<br>Y los colmillos dos tercios<br>De la asta de su lanzon.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">Both arms extended was the length<br>Of every jawbone in its stance<br>Believed at once its curling tusks<br>Two thirds length of his mighty lance.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 13</div><div class="stanza-spanish">Al volver a sus Estados<br>Las dos quijadas colgo<br>De un talisay gigantesco<br>En su casa de Tundol.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">Returning home from hunting spree<br>He hung the jawbones on a tree,<br>A big talisay there it would be<br>Near Tondol house for all to see.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 14</div><div class="stanza-spanish">A los viejos cazadores<br>Causaron admiracion<br>Estos trofeos gloriosos<br>De su rey el gran Baltog.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">Old hunters then, did praises sing<br>In honor of their Great Baltog king<br>To see such wonders chase could bring<br>For glorious trophies to people bring.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 15</div><div class="stanza-spanish">Fueron a verios las tribus<br>De Panicuason y Asog;<br>Y dejeron que, en sus dias<br>No hubo jabali mayor.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">People of Panikwason and Asog tribe<br>Arrived to view enormous hog<br>Said in their days saw not a boar<br>As big as that killed by Baltog.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 16</div><div class="stanza-spanish">Le llamaron Tandaya<br>De los montes de Ligñon<br>Por su exacto parecido<br>Con el monstruo Behemot.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">They called it the Tandayag boar<br>Of Lingyon Hill there its fold<br>Because its likeness exactly told<br>The Behemot monster bold.</div></div>
+                    </div>
+
+                    <!-- ── Handyong Arrival ── -->
+                    <div class="section-header-stanza">Handyong &mdash; Arrival &amp; Monster Battles</div>
+
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 17</div><div class="stanza-spanish">Despues de este vino al Bicol<br>Con gueteros Handiong,<br>Quien de monstruos la comarca<br>En poco tiempo limpio.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">Soon after this to Bicol came<br>The grand Handyong, with warriors band<br>Resolved to destroy their very stand<br>All monstrous creatures of the land.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 18</div><div class="stanza-spanish">Batallas para extingirlos<br>Mil y mil el empeño<br>De todos siempre saliendo<br>Con aires de vencedor.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">To wipe them, battles fought galore<br>Handyong whom truly they adore,<br>In all the thousand victory he fought<br>Against all monsters they conquer.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 19</div><div class="stanza-spanish">Los monoculos trifauces<br>Que havitaban en Ponon<br>En diez lunas sin descanso<br>Por completo destruyo.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">Three-throated beast with just one eye<br>Had made inhabit Ponong's dryland<br>For ten restless months they attacked<br>Till he had destroyed and all did die.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 20</div><div class="stanza-spanish">Los alados tiburones<br>Y el bufalo cimarron<br>Que por los montes volaban<br>En menos tiempo amanso.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">The winged sharks that ploughed the deep,<br>Carabaos roamed in their wild style<br>Cavorting happily in mountainsides<br>He did imprint his taming marks.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 21</div><div class="stanza-spanish">Los buayas colosales<br>Como los balotos de hoy,<br>Y los fieros sarimaos<br>Al Colasi destierro.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">All the gigantic crocodiles<br>The size of bancas of today<br>Fierce Sarimaos with their wiles<br>To Culasi exiled away.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 22</div><div class="stanza-spanish">Las serpientes, que tenian<br>Cual de serena la voz,<br>Del Hantic en la caverna<br>Para siempre sepulto, Oriol</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">The serpents whose voice did enthrall<br>Like the siren's tempting call,<br>In Hantic's wide cavernous hall<br>Forever they were buried all.</div></div>
+                    </div>
+
+                    <!-- ── Oryol ── -->
+                    <div class="section-header-stanza">Oryol &mdash; The Unconquerable Serpent</div>
+
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 23</div><div class="stanza-spanish">Pero no pudo vencer,<br>Por la mas maña que se dio<br>A la culebra sagu<br>Conocida por la Oriol.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">However, he could not defeat<br>Even to used cunning and deceit<br>Against the snake's sagacious wit<br>The most elusive one, name Oryol.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 24</div><div class="stanza-spanish">Esta culebra sabia<br>Mas que el famoso Handiong<br>Y a sus ojos fascinaba<br>Con afable seduccion.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">More learned and wiser than Handyong<br>Whose fascinating eye, lovelier to see<br>As if it were a sweet gesture<br>Beckoning him seductively.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 25</div><div class="stanza-spanish">Mil lazos Handiong le puso<br>Y de todo se burlo,<br>Los nudos desenredando<br>Con sagacidad mayor.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">Handyong bound it a thousand ways<br>It only scoffed and mocked around<br>With its crowned sagacity<br>It always untied the knots.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 26</div><div class="stanza-spanish">Con palabaras seductoras<br>Muchas veces le engaño,<br>Que en eso de fingimientos<br>Era gran maestra Oriol.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">With seducing words, he was told<br>So many times Handyong was fooled<br>That in pretending she was called<br>Oryol, the great teacher of deceit.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 27</div><div class="stanza-spanish">Cuantas veces por el bosque<br>Sin descanso la siguio<br>Creyendo de la serena<br>En la seductora voz!</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">How many times without a rest,<br>He searched her in to the woods,<br>He thought that what had lured him on<br>Believing the voice of a siren there!</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 28</div><div class="stanza-spanish">Los trabajos del gran Hercules,<br>Las conquistas que gano,<br>Todo hubiera fracasado<br>Por la influencia de Oriol.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">The task of renowned Hercules,<br>The gains that gave immortal seat<br>Could have been failures and defeat<br>If interfered like creature such Oryol.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 29</div><div class="stanza-spanish">Peromera inscontante,<br>Ella mismo ayudo<br>Para vencera a los monstruos<br>Que infestaban la region.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">But inconsistent in its act<br>Oryol itself did help Handyong<br>To all the monsters must conquer<br>That have infested the Bicol land.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 30</div><div class="stanza-spanish">Luchaban con las buayas<br>Brazo a brazo, y vencedor<br>De combates tan tremendos<br>Sin menoscabo salio.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">Together they fought victoriously<br>Against the giant crocodiles they won<br>After the battles and onslaught<br>No scratchy wounds to him was wrought.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 31</div><div class="stanza-spanish">Los pongos y orangutangs<br>La miraban con horror,<br>Porque las aguas del Bicol<br>Con su sangre coloro.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">The pongos and orangutans<br>Watching the fight filled with horror stung,<br>With color due to crocodiles blood<br>He tinged the Bicol River red.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 32</div><div class="stanza-spanish">Eran monos pendencieros<br>De conocida valor<br>Pero el gigante los hizo<br>Retirarse al Isarog.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">Those wild monkeys which were troublesome,<br>Whose valor was widely spread,<br>The huge Handyong drove all away<br>To Isarog's mountainous dome.</div></div>
+                    </div>
+
+                    <!-- ── Peaceful Pursuits ── -->
+                    <div class="section-header-stanza">Peaceful Pursuits &mdash; The Golden Age of Civilization</div>
+
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 33</div><div class="stanza-spanish">Y libre ya de alimañas<br>Quedando asi la region<br>En dar leves a su pueblo<br>Como suno interes penso.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">Now that the land set free at last<br>With no more beasts of prey to kill,<br>He established better people laws<br>To serve his people interest and will.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 34</div><div class="stanza-spanish">Handiong y sus compañeros<br>Plantaron con un bolod<br>Linzas, que dieron sus frutas<br>Tan grandes como un pansol.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">Handyong's companions to his call<br>They planted linsa on a hill,<br>Producing tuber roots and all<br>The giant size of a pansol.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 35</div><div class="stanza-spanish">Tambien en un sitio bajo<br>Sembraron el rico arroz<br>Que Handiong largos siglos<br>El sobrenombre llevo.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">Then also in a lowland site<br>They sowed along rich-yielding rice<br>That many centuries along<br>Known by the nickname Hinandyong.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 36</div><div class="stanza-spanish">Hizo la primera canoa<br>Que por el Bicol surco;<br>Menos el timon y vela<br>Que fueron por Guinantong.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">Handyong the first to build a boat<br>To Bicol River navigate on high<br>Except its rudder and its sail<br>Kimantong's doing and supply.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 37</div><div class="stanza-spanish">Este invento los arados,<br>El piene y el pagolon,<br>La ganta y otras medidas,<br>El sacal, bolo y lando.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">Besides he invented the plow,<br>The harrow and the roll in tow,<br>The ganta, other measures, too,<br>The bolo, hoe, and yoke for cow.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 38</div><div class="stanza-spanish">Los telares y argadillos<br>Fueron obra de Hablom,<br>Quien con asombra de todos<br>Un dia al rey presento.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">They say that the loom and bobbins<br>Hablom one day worked hard to make,<br>To the surprise of everyone,<br>To king Handyong he gave away.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 39</div><div class="stanza-spanish">Invento la gorgoreta,<br>Coron, calan, y paso<br>Y otros varios utensiles<br>El pigmeo Dinahon.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">The earthen jar, pot, bowl and stove,<br>And utensils I can't recall<br>The pygmy called Dinahong<br>Had invented all the workmanship.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 40</div><div class="stanza-spanish">El alfabeto fue Sural,<br>Quien curioso combino,<br>Grabandola en piedra Libon,<br>Que pulimento Gapon.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">Surath had mystically combined<br>Carve in stone the exotic suratin<br>Encountered in place called Libon<br>Then, was polished later by Gapon.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 41</div><div class="stanza-spanish">Hicieron ciudad y casas<br>En disegual proporcion,<br>En las ramas suspendiendolas<br>Del banasi y camagon.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">They built a houses with city zone<br>Unequal proportion of various sizes<br>And hanging branches they were prone<br>Of trees banasi, and kamagong.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 42</div><div class="stanza-spanish">Que eran tantos los insectos,<br>Tan excesivo calor,<br>Que solo en el moog podian<br>Pasar el rigor del sol.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">With swarming insects all around<br>And with the burning sun to beat,<br>Its only at the moog seat<br>Where they could go to bear the heat.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 43</div><div class="stanza-spanish">Y leyes mando muy justas<br>Sobre la vida y honor<br>A los que todos sujetos<br>Estaban sin distincion.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">The laws and orders just made for all,<br>Upon their life and honor laid<br>He said equality to all the subjects<br>No distinction made both high and low.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 44</div><div class="stanza-spanish">Todos su puesto guardaban,<br>El esclavo y el señor,<br>Respetando los derechos<br>De prosapia y sucesion.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">In what position to him endowed<br>The slave and master truly showed<br>Respect for rights of heritage<br>And of succession as bestowed.</div></div>
+                    </div>
+
+                    <!-- ── The Deluge ── -->
+                    <div class="section-header-stanza">The Deluge &mdash; Cataclysm</div>
+
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 45</div><div class="stanza-spanish">Hubo entonces un diluvio<br>Promovido por el Onos,<br>Que el aspecto de esta tierra<br>Por completo trastorno.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">Then came a deluge on the land<br>Caused by the Onos force of old<br>So that the features of this earth<br>Were completely changed to behold.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 46</div><div class="stanza-spanish">Reventaron los volcanes<br>Hantic, Colasi, Isarog,<br>Y al mismo tiempo sentiose<br>Un espantoso temblor.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">Volcanoes Hantik, Isarog,<br>Culasi also burst so quick<br>And was felt simultaneously<br>The whole ground quake convulsively.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 47</div><div class="stanza-spanish">Fue tanta sacudida,<br>Que el mar en seco dejo<br>El istmo de Pasacao<br>Del modo que se ve hoy.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">So mighty was the jolting sway<br>To its bottom the sea gave way<br>Effecting isthmus in the fray<br>At Pasacao as seen today.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 48</div><div class="stanza-spanish">Separo del continente<br>La isleta de Malbogon<br>Donde moran las sibilas<br>Llamadas Hilan, Lariong.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">A torn part of the mainland formed<br>The islet known as Malbogong<br>Inhabited by witches strong<br>The so-called Hilang and Laryong.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 49</div><div class="stanza-spanish">El caudaloso Inarihan<br>Su curso el Este torcio,<br>Pues, antes del cataclismo,<br>Desaguaba por Ponon.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">The waters flow of Inarihan<br>Its course due East ran up all wrong,<br>So that before this cataclysm<br>Flowed to Ponong, where set the sun.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 50</div><div class="stanza-spanish">En Bato se hundio un gran monte<br>Y en su sitio aparecio<br>El lago, hoy alimenta<br>Con su pesca a Ibalon.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">In Bato a big mountain sank<br>That generated water tank<br>A lake came up which now supplies<br>Fish consumption by Ibalong folks.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 51</div><div class="stanza-spanish">Del golfo de Calabagñan<br>Desaparecio Dagatnon,<br>De donde eran los Dumagat<br>Que habitaron en Cotmon.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">From the gulf of Calabangan<br>Where all Dagatnong has-been wiped out<br>From which had come the Dumagat<br>Who had inhabited Cotmong.</div></div>
+                    </div>
+
+                    <!-- ── Bantong ── -->
+                    <div class="section-header-stanza">Bantong &mdash; The Young Warrior &amp; Death of Rabot</div>
+
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 52</div><div class="stanza-spanish">Fue este reino poderoso<br>En los tiempos de Bantong,<br>Compañero inseparable<br>Del aguerrido Handiong.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">Soon this kingdom grew powerful<br>To golden era of Young Mantong<br>Who was a faithful Prince companion<br>Of battle-wary Old Handyong.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 53</div><div class="stanza-spanish">Le mando alli con mil hombres<br>Para a matar a Rabot,<br>Medio hombre y media fiera,<br>Hechicero embaucador.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">Handyong gave him a thousand men<br>To kill Rabot to rid this land<br>Who was half-human and half-beast,<br>Magician, liar, that plagued the land.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 54</div><div class="stanza-spanish">Todos lo que alli abordaron<br>Antes de esta expedicion<br>En piedras convertieron<br>El encanto de Rabot.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">All the brave men, traveled in quest<br>Who dared to near its lair at least<br>Had turned at once to solid stones<br>By the sheer magic of the beast.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 55</div><div class="stanza-spanish">Bantong supo que este mago<br>Era un grande dormilon,<br>Haciendolo asi de dia<br>Sin ninguna precaucion.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">Being magi, Mantong had rightly guessed<br>That this Rabot observed heavily slept<br>Without precaution lay along<br>And that it did this all day long.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 56</div><div class="stanza-spanish">Alla llevo sus soldados<br>En un dia de aluvion,<br>Y antes que el despertara<br>De un tajo lo dividio.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">One floody day, watched by his men,<br>Mantong did go, his job to do,<br>Before the waking time was due<br>One stoke cut Rabot into two.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 57</div><div class="stanza-spanish">Asi y todo daba gritos<br>Con tan estentorea voz<br>Que lo oyeron de los mangles<br>De bognad y camagon.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">From the bold shout warriors of Mantong<br>Rose a loud dying cries so taut<br>That rang throughout the mangrove swamps,<br>The bunga, kamagong, no doubt.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 58</div><div class="stanza-spanish">Le llevaron a Libmanan<br>Do fue a verle el gran Handiong<br>Y ante su vista asustado<br>Por largo tiempo quedo.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">The corpse was brought to Ligmanan<br>Where it was seen by great Handyong<br>Truly shocked him very terribly<br>That remained in him for long.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 59</div><div class="stanza-spanish">Pues jamas el hubo visto<br>Un viviente tan atroz<br>De figura tan horrible<br>Ni de mas tremenda voz.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">For surely he had never seen<br>A more atrocious living thing<br>Horrible form which caused a sting<br>And voice much louder than its ring.</div></div>
+                    </div>
+                    <div class="stanza-block">
+                        <div><div class="stanza-num">Stanza 60 &mdash; Final Stanza</div><div class="stanza-spanish">Aqui suspendio Cadugñung<br>Su primera narracion<br>Dejando para otro dia<br>De continuarla occasion.</div></div>
+                        <div><div class="stanza-num">English</div><div class="stanza-english">And here Cadungung did stay<br>The first part of his ancient lay<br>To leave a continuation way<br>The occasion of another day.</div></div>
+                    </div>
+
+                    <!-- End note -->
+                    <div class="mt-10 p-5 rounded-xl bg-[#0D0C0A] border border-[#332D24] text-center">
+                        <p class="font-playfair italic text-[#B8B0A5] text-sm">
+                            <span class="text-[#D4AF37]">&#8220;</span>
+                            And here Cadungung did stay the first part of his ancient lay, to leave a continuation way, the occasion of another day.
+                            <span class="text-[#D4AF37]">&#8221;</span>
+                        </p>
+                        <p class="text-[10px] text-[#B8B0A5]/50 mt-2 tracking-widest uppercase">End of the surviving 60-stanza fragment</p>
+                        <p class="text-xs text-[#B8B0A5]/60 mt-3">Source: <a href="https://www.luisgdato.com/handiong-epic-of-bicolandia/" class="ref-link" target="_blank">luisgdato.com &mdash; Translation by Luis G. Dato (1965)</a></p>
+                    </div>
+                </div>
+
+
+                <!-- ══════════════════════════════════
+                     SLIDE 3: RESEARCH & ANALYSIS
+                ══════════════════════════════════ -->
+                <div class="carousel-slide p-6 md:p-10" id="slide-2">
+
+                    <div class="text-center mb-10">
+                        <p class="font-cinzel text-xs text-[#8B2626] tracking-[0.2em] uppercase mb-1">Scholarly Analysis</p>
+                        <h2 class="font-cinzel text-2xl font-bold text-[#D4AF37] gold-glow">Research Documentation</h2>
+                        <p class="font-playfair italic text-[#B8B0A5] text-sm mt-1">The Ibalong Epic &mdash; Academic Research Paper</p>
+                        <div class="ornament mt-4 max-w-xs mx-auto"><span class="text-[#D4AF37]">&#10022;</span></div>
+                    </div>
+
+                    <!-- 1. What Is It? -->
+                    <div class="research-section">
+                        <h2 class="research-h2">1. What Is It?</h2>
+                        <p class="research-p">The <em>Ibalong</em> (also spelled <em>Ib&aacute;long</em>) is a 60-stanza fragment of a longer Bicolano folk epic, considered the foundational literary and oral-tradition artwork of the Bicol region of the Philippines. As a folk epic &mdash; a genre also represented elsewhere in the archipelago by the Ilocano <em>Biag ni Lam-ang</em>, the Maranao <em>Darangen</em>, and the Panay <em>Hinilawod</em> &mdash; the Ibalong belongs to a class of pre-colonial narrative poetry that recounts, in heroic and often supernatural terms, the founding, settlement, and civilizing of a people's ancestral land.</p>
+                        <p class="research-p">Structurally, the surviving text is a narrative verse poem told through the frame device of a bard, <strong class="text-[#FAF4EC]">Kadunung</strong>, who is asked by a listener named Iling to sing of the &ldquo;glorious Ib&aacute;long of long ago.&rdquo; What survives today is not the complete epic; the fragment ends abruptly mid-story, with the bard promising to continue &ldquo;some other time&rdquo; &mdash; a continuation that was apparently never recorded.</p>
+                        <p class="research-p">The epic is often compared to a founding or origin myth, chronicling three successive warrior-heroes &mdash; Baltog, Handyong, and Bantong &mdash; who each rid the ancient land of monstrous beings, alongside a &ldquo;golden age&rdquo; of cultural inventions (agriculture, tools, boats, weaving, pottery, and writing) attributed to named culture-heroes. Scholars have also noted structural and thematic parallels to the Indian <em>Ramayana</em> and <em>Mahabharata</em>, given the epic's references to heroes originating from &ldquo;Boltavara&rdquo; (believed to reference <em>Bharata-varsha</em>, an old name for India).</p>
+                        <p class="research-p">Today, the Ibalong functions simultaneously as: (a) a literary text studied in Philippine literature curricula, (b) a historical-anthropological source for pre-colonial Bicolano life, and (c) a living cultural tradition, re-enacted annually in festival, theater, and visual-art form.</p>
+                    </div>
+
+                    <!-- 2. Where Is It From? -->
+                    <div class="research-section">
+                        <h2 class="research-h2">2. Where Is It From?</h2>
+                        <p class="research-p">The epic is rooted in the <strong class="text-[#FAF4EC]">Bicol Region (Region V)</strong> of southeastern Luzon, Philippines, and specifically narrates events set in the ancient territory called &ldquo;Ibalong&rdquo; or &ldquo;Aslon.&rdquo; Historically, the entire Bicol peninsula was referred to as Ibalong, until it was administratively divided in 1636.</p>
+                        <p class="research-p font-semibold text-[#FAF4EC] text-xs tracking-wider uppercase">Key locations in or associated with the epic:</p>
+                        <ul class="mb-4">
+                            <li class="research-li"><strong class="text-[#FAF4EC]">Tondol</strong> (Camalig, Albay) &mdash; where Baltog settled and planted his crops</li>
+                            <li class="research-li"><strong class="text-[#FAF4EC]">Ligmanan / Libmanan</strong> (Camarines Sur) &mdash; claimed seat of the ancient &ldquo;Kingdom of Ibalong&rdquo;</li>
+                            <li class="research-li"><strong class="text-[#FAF4EC]">Mount Isarog, Mount Masaraga, Mount Asog, Mount Hantik</strong> &mdash; volcanic landmarks tied to epic events</li>
+                            <li class="research-li"><strong class="text-[#FAF4EC]">Lake Bato and Lake Buhi</strong> &mdash; bodies of water said to have formed during the epic&rsquo;s cataclysmic flood</li>
+                            <li class="research-li"><strong class="text-[#FAF4EC]">Pasacao</strong> (Camarines Sur) &mdash; seacoast said to have emerged from the sea during the disaster</li>
+                            <li class="research-li"><strong class="text-[#FAF4EC]">The Bicol River</strong> &mdash; site of Handyong&rsquo;s battles against crocodiles, said to have run red with their blood</li>
+                        </ul>
+                        <p class="research-p">Geographically, the epic&rsquo;s world roughly corresponds to what is today the provinces of <strong class="text-[#FAF4EC]">Albay and Camarines Sur</strong>, with Legazpi City (Albay) now serving as the epic&rsquo;s primary modern festival home.</p>
+                    </div>
+
+                    <!-- 3. Who Is Involved? -->
+                    <div class="research-section">
+                        <h2 class="research-h2">3. Who Is Involved?</h2>
+                        <h3 class="research-h3">Figures Within the Narrative</h3>
+                        <ul class="mb-4">
+                            <li class="research-li"><strong class="text-[#FAF4EC]">Kadunung</strong> &mdash; the legendary native bard credited with originally composing and reciting the epic</li>
+                            <li class="research-li"><strong class="text-[#FAF4EC]">Iling</strong> &mdash; the listener who requests the tale at the poem&rsquo;s opening</li>
+                        </ul>
+                        <h3 class="research-h3">Historical Transmitters &amp; Scholars</h3>
+                        <ul class="mb-4">
+                            <li class="research-li"><strong class="text-[#FAF4EC]">Fray Bernardino de Melendreras de la Trinidad, OFM (1815&ndash;1867)</strong> &mdash; Franciscan friar who first collected and transcribed the narrative into a Spanish-language manuscript (since lost)</li>
+                            <li class="research-li"><strong class="text-[#FAF4EC]">Fray Jose Casta&ntilde;o, OFM</strong> &mdash; published a 60-stanza excerpt in 1895</li>
+                            <li class="research-li"><strong class="text-[#FAF4EC]">Luis G. Dato</strong> &mdash; Bicolano poet laureate who translated the fragment into English verse in 1965</li>
+                            <li class="research-li"><strong class="text-[#FAF4EC]">Merito B. Espinas</strong> &mdash; scholar whose full English translation appeared in the <em>Far Eastern University Faculty Journal</em> in 1996</li>
+                            <li class="research-li"><strong class="text-[#FAF4EC]">Ma. Lilia F. Realubit</strong> &mdash; Bicolano literary scholar whose analysis of the epic&rsquo;s ending is widely cited</li>
+                            <li class="research-li"><strong class="text-[#FAF4EC]">Zeus Salazar</strong> &mdash; Filipino historian who wrote on the etymology of &ldquo;Ibalon&rdquo;</li>
+                        </ul>
+                        <h3 class="research-h3">Modern Creative Custodians</h3>
+                        <ul>
+                            <li class="research-li"><strong class="text-[#FAF4EC]">Abdon M. Balde Jr.</strong> &mdash; author of <em>Awit ni Kadunung</em> (2008), a 623-page Filipino novelistic expansion of the epic</li>
+                            <li class="research-li"><strong class="text-[#FAF4EC]">Rody Vera and Tuxqs Rutaquio</strong> &mdash; playwright and director of <em>Ibalong: The Musical</em> (Tanghalang Pilipino)</li>
+                            <li class="research-li">Community organizers of the <strong class="text-[#FAF4EC]">Ibalong Festival</strong> in Legazpi City</li>
+                        </ul>
+                    </div>
+
+                    <!-- 4. Characteristics -->
+                    <div class="research-section">
+                        <h2 class="research-h2">4. What Are Its Characteristics?</h2>
+                        <h3 class="research-h3">Literary Style &amp; Structure</h3>
+                        <p class="research-p">The Ibalong survives as a 60-stanza narrative poem in Spanish, written in a ballad-like rhyming quatrain structure, framed as an oral performance delivered by a bard to a listening audience. It follows an episodic, cumulative structure: each of the three heroes confronts and overcomes a distinct set of obstacles, escalating in scale. Notably, the epic ends without resolution or moral closure &mdash; the bard simply promises a continuation that history has not preserved, giving the text an unusually open and melancholic tone.</p>
+                        <h3 class="research-h3">Oral Tradition &amp; Transmission</h3>
+                        <p class="research-p">Like most Philippine folk epics, the Ibalong was originally an orally transmitted chant, performed rather than read, and only survives because it was transcribed by Spanish friars in the 19th century. No complete pre-colonial Bicolano-language version survives; the fragment&rsquo;s oldest extant text is in Spanish, not Bicol.</p>
+                        <h3 class="research-h3">Core Themes</h3>
+                        <ul class="mb-4">
+                            <li class="research-li">Bravery and heroism in the face of overwhelming, monstrous adversity</li>
+                            <li class="research-li">Wisdom and strategy over brute force (Bantong&rsquo;s patience vs. Rabot)</li>
+                            <li class="research-li">Communal progress and civilization-building through named inventions</li>
+                            <li class="research-li">Resilience against natural disaster (flood, volcanic eruption, earthquake)</li>
+                            <li class="research-li">Social equity within hierarchy &mdash; Handyong&rsquo;s laws protected both &ldquo;slaves and masters&rdquo;</li>
+                        </ul>
+                    </div>
+
+                    <!-- 5. Cultural Significance -->
+                    <div class="research-section">
+                        <h2 class="research-h2">5. What Is Its Cultural Significance?</h2>
+                        <p class="research-p">The Ibalong holds a place in Bicolano culture comparable to that of a founding national epic &mdash; frequently described as an &ldquo;invaluable piece of literature&rdquo; recording the early struggles of the ancient Bicolanos for survival, order, and growth.</p>
+                        <ul>
+                            <li class="research-li"><strong class="text-[#FAF4EC]">Proof of a pre-colonial civilization</strong> &mdash; demonstrates organized, law-governed, technologically inventive societies existed in Bicol before 1521</li>
+                            <li class="research-li"><strong class="text-[#FAF4EC]">A named, mapped mythology</strong> &mdash; tied to real, still-existing places: Mount Isarog, Lake Bato, the Bicol River</li>
+                            <li class="research-li"><strong class="text-[#FAF4EC]">A secular, non-religious festival tradition</strong> &mdash; the Ibalong Festival (Legazpi City, est. 1992) is explicitly civic and pre-colonial in its symbolism</li>
+                            <li class="research-li"><strong class="text-[#FAF4EC]">Communal pride amid environmental hardship</strong> &mdash; the epic's disaster sequence mirrors Bicol's chronic vulnerability to typhoons and volcanic activity</li>
+                            <li class="research-li"><strong class="text-[#FAF4EC]">A living, reinterpreted tradition</strong> &mdash; continues to generate serious literary and historical output</li>
+                        </ul>
+                    </div>
+
+                    <!-- 6. Bikolano Identity -->
+                    <div class="research-section">
+                        <h2 class="research-h2">6. What Does It Tell Us About Bikolano Identity?</h2>
+                        <ul>
+                            <li class="research-li"><strong class="text-[#FAF4EC]">Relationship to land and water</strong> &mdash; the name &ldquo;Ibalon&rdquo; connects Bicolanos to river- and coast-dwelling identity</li>
+                            <li class="research-li"><strong class="text-[#FAF4EC]">Courage paired with strategy</strong> &mdash; Bantong&rsquo;s victory through patience, Handyong&rsquo;s through alliance over domination</li>
+                            <li class="research-li"><strong class="text-[#FAF4EC]">Orientation toward collective progress</strong> &mdash; distributes credit widely across named inventors for farming tools, weaving, pottery, and writing</li>
+                            <li class="research-li"><strong class="text-[#FAF4EC]">Negotiated relationship with outside influence</strong> &mdash; all three heroes are foreign arrivals who civilize the land, an early acknowledgment of migration and exchange</li>
+                            <li class="research-li"><strong class="text-[#FAF4EC]">Cultural memory of vulnerability and resilience</strong> &mdash; the cataclysm sequence is an inherited, almost geological memory of a hazard-prone homeland</li>
+                            <li class="research-li"><strong class="text-[#FAF4EC]">Ambivalent relationship with history</strong> &mdash; Handyong mourning Rabot&rsquo;s death has been read as foreboding the coming subjugation of the Bicolanos under Spanish rule</li>
+                        </ul>
+                    </div>
+
+                    <!-- 7. Why Preserve? -->
+                    <div class="research-section">
+                        <h2 class="research-h2">7. Why Should It Be Preserved?</h2>
+                        <ul>
+                            <li class="research-li">It is one of a shrinking number of surviving pre-colonial Philippine epics &mdash; only a 60-stanza fragment remains of a once-complete work</li>
+                            <li class="research-li">It is a primary source for understanding pre-colonial Philippine society &mdash; agriculture, technology, law, and cosmology</li>
+                            <li class="research-li">It anchors a living regional identity &mdash; sustaining civic, artistic, and touristic life in Bicol</li>
+                            <li class="research-li">It resists a colonial-centered narrative of Philippine history by demonstrating organized civilization before foreign contact</li>
+                            <li class="research-li">Its documentary trail remains fragile &mdash; a 2024 discovery of a Melendreras-signed document in Libmanan was found deteriorating and termite-damaged</li>
+                            <li class="research-li">It offers enduring, transferable values &mdash; courage, wisdom, resilience &mdash; relevant for younger generations</li>
+                        </ul>
+                    </div>
+
+                    <!-- References -->
+                    <div class="mt-8 p-5 rounded-xl bg-[#0D0C0A] border border-[#332D24]">
+                        <p class="font-cinzel text-xs font-bold tracking-[0.15em] text-[#D4AF37] uppercase mb-3">References</p>
+                        <ul class="space-y-2">
+                            <li class="text-xs text-[#B8B0A5]">Balde, A. M., Jr. (2008). <em>Awit ni Kadunung</em>. UST Publishing House.</li>
+                            <li class="text-xs text-[#B8B0A5]">Calleja, D. O. (2013, August 31). Ibalong Festival street presentation. <em>Balita.ph</em>.</li>
+                            <li class="text-xs text-[#B8B0A5]">Clark, J. (2016, September 3). Ib&aacute;long: Bicol's 60-stanza folk epic. <em>The Aswang Project</em>. <a href="https://www.aswangproject.com/ibalong-epic/" class="ref-link" target="_blank">aswangproject.com</a></li>
+                            <li class="text-xs text-[#B8B0A5]">Dateline Ibalon. (2022). History of Ibalon. <a href="https://dateline-ibalon.com/about-ibalon/" class="ref-link" target="_blank">dateline-ibalon.com</a></li>
+                            <li class="text-xs text-[#B8B0A5]">Santiago, K. S. (2013). Theater review: &lsquo;Ibalong&rsquo;s imagination. <em>GMA News Online</em>.</li>
+                            <li class="text-xs text-[#B8B0A5]">Talla, S. C. D. (2020). Handiong: Epic of Bicolandia. <em>Luis G. Dato</em>. <a href="https://luisgdato.com/handiong-epic-of-bicolandia/" class="ref-link" target="_blank">luisgdato.com</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- end carousel-track -->
+            </div>
+        </div>
+
+        <!-- Slide progress indicator -->
+        <div class="flex justify-center gap-2 mt-5">
+            <button class="slide-dot dot-active" data-slide="0" aria-label="Go to summary slide"></button>
+            <button class="slide-dot"            data-slide="1" aria-label="Go to poem slide"></button>
+            <button class="slide-dot"            data-slide="2" aria-label="Go to research slide"></button>
+        </div>
+
+    </section>
+
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer class="mt-auto border-t border-[#332D24] py-8 px-6" style="background:#0D0C0A;">
+        <div class="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-[#B8B0A5]/50 tracking-widest uppercase">
+            <a href="index.html" class="font-cinzel text-[#D4AF37] hover:text-[#FAF4EC] transition tracking-widest text-xs">&#8592; Back to Archive Home</a>
+            <p>&copy; 2026 Group 2 &middot; Art Appreciation &middot; Ibalong Archive</p>
+            <div class="flex gap-4">
+                <a href="gallery.html"  class="hover:text-[#D4AF37] transition">Gallery</a>
+                <a href="lamang.html"   class="hover:text-[#D4AF37] transition">Biag ni Lam-ang</a>
+                <a href="index.html#matrix" class="hover:text-[#D4AF37] transition">Matrix</a>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- ═══ JAVASCRIPT ═══ -->
+    <script>
+        // ── CAROUSEL ──
+        var track    = document.getElementById('carousel-track');
+        var tabs     = document.querySelectorAll('.slide-tab');
+        var dots     = document.querySelectorAll('.slide-dot');
+        var current  = 0;
+
+        function goToSlide(idx) {
+            current = idx;
+            document.querySelectorAll('.carousel-slide').forEach(function(slide, i) {
+                slide.classList.toggle('active', i === idx);
+            });
+
+            tabs.forEach(function(t, i) {
+                t.classList.toggle('active', i === idx);
+            });
+            dots.forEach(function(d, i) {
+                d.classList.toggle('dot-active', i === idx);
+            });
+        }
+
+        tabs.forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                goToSlide(parseInt(btn.getAttribute('data-slide')));
+            });
+        });
+        dots.forEach(function(dot) {
+            dot.addEventListener('click', function() {
+                goToSlide(parseInt(dot.getAttribute('data-slide')));
+            });
+        });
+
+        // ── MOBILE MENU ──
+        var menuToggle = document.getElementById('menu-toggle');
+        var mobileMenu = document.getElementById('mobile-menu');
+        menuToggle.addEventListener('click', function() {
+            mobileMenu.classList.toggle('open');
+        });
+
+        // ── SCROLL REVEAL ──
+        var revealEls = document.querySelectorAll('.reveal');
+        var obs = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    obs.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        revealEls.forEach(function(el) { obs.observe(el); });
+
+        // ── HEADER SHADOW ──
+        window.addEventListener('scroll', function() {
+            document.getElementById('header').style.boxShadow =
+                window.scrollY > 40 ? '0 4px 30px rgba(0,0,0,0.5)' : 'none';
+        });
+    </script>
+</body>
+</html>

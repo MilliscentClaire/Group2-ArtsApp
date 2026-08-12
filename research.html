@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research Papers | Epikong-Bayan Archive</title>
+    <meta name="description" content="Academic research papers, document hubs, and source files for the Ibalong and Biag ni Lam-ang epics.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --canvas:#0D0C0A; --card:#181613; --pri:#FAF4EC; --sec:#B8B0A5; --gold:#D4AF37; --bronze:#332D24; --red:#8B2626; }
+        * { box-sizing:border-box; }
+        body { font-family:'Plus Jakarta Sans',sans-serif; background:var(--canvas); color:var(--pri); -webkit-font-smoothing:antialiased; }
+        ::selection { background:var(--gold); color:#000; }
+        ::-webkit-scrollbar { width:6px; }
+        ::-webkit-scrollbar-track { background:var(--canvas); }
+        ::-webkit-scrollbar-thumb { background:var(--bronze); border-radius:3px; }
+        ::-webkit-scrollbar-thumb:hover { background:var(--gold); }
+        .font-cinzel   { font-family:'Cinzel',serif; }
+        .font-playfair { font-family:'Playfair Display',serif; }
+        .gold-glow { text-shadow:0 2px 20px rgba(212,175,55,.35); }
+        .nav-link { position:relative; transition:color .25s; }
+        .nav-link::after { content:''; position:absolute; bottom:-2px; left:0; right:0; height:1px; background:var(--gold); transform:scaleX(0); transition:transform .25s; }
+        .nav-link:hover::after { transform:scaleX(1); }
+        .nav-link:hover { color:var(--gold); }
+        @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.5;transform:scale(.8);} }
+        .pulse-dot { animation:pulse-dot 2s ease-in-out infinite; }
+        #mobile-menu { display:none; }
+        #mobile-menu.open { display:flex; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- HEADER -->
+    <header id="header" class="sticky top-0 z-50 transition-all duration-300" style="background:rgba(13,12,10,0.85);backdrop-filter:blur(16px);border-bottom:1px solid #332D24;">
+        <div class="max-w-6xl mx-auto px-5 py-3.5 flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-3 group">
+                <span class="pulse-dot w-2.5 h-2.5 rounded-full bg-[#8B2626] block"></span>
+                <span class="font-cinzel text-base font-bold tracking-widest text-[#D4AF37] group-hover:text-[#FAF4EC] transition">EPIKONG-BAYAN</span>
+                <span class="hidden sm:inline text-[#332D24] font-light text-lg leading-none">|</span>
+                <span class="hidden sm:inline font-cinzel text-xs tracking-[0.15em] text-[#B8B0A5] uppercase">Archive</span>
+            </a>
+
+            <nav class="hidden md:flex items-center gap-7 text-xs font-semibold tracking-wider uppercase text-[#B8B0A5]">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="gallery.html" class="nav-link">Gallery</a>
+                
+                <!-- Epics Dropdown -->
+                <div class="relative group inline-block">
+                    <button class="nav-link flex items-center gap-1.5 focus:outline-none tracking-wider uppercase">
+                        Epics <span class="text-[8px] transition-transform duration-200 group-hover:rotate-180">&#9660;</span>
+                    </button>
+                    <div class="absolute left-0 top-full pt-2 w-44 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-200 z-50">
+                        <div class="bg-[#181613] border border-[#332D24] rounded-lg shadow-xl py-1">
+                            <a href="ibalong.html" class="block px-4 py-2.5 text-xs text-[#B8B0A5] hover:text-[#D4AF37] hover:bg-[#0D0C0A] transition font-semibold tracking-wider uppercase">Ibalong</a>
+                            <a href="lamang.html" class="block px-4 py-2.5 text-xs text-[#B8B0A5] hover:text-[#D4AF37] hover:bg-[#0D0C0A] transition font-semibold tracking-wider uppercase">Biag ni Lam-ang</a>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="matrix.html" class="nav-link">Matrix</a>
+                <a href="research.html" class="nav-link text-[#D4AF37]">Research</a>
+                <a href="about.html" class="nav-link">About Us</a>
+                <a href="https://docs.google.com/document/d/1IhcXQc-7Jw935bRVZZzaIuoPU66uW-oy9SXhcwQ7Qdw/edit?usp=sharing" target="_blank" class="ml-2 px-4 py-1.5 rounded-lg border border-[#D4AF37]/40 text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black transition text-xs font-bold tracking-widest">DOC &#8599;</a>
+            </nav>
+
+            <button id="menu-toggle" class="md:hidden flex flex-col gap-1.5 p-2 focus:outline-none" aria-label="Toggle menu">
+                <span class="w-5 h-0.5 bg-[#FAF4EC] block"></span>
+                <span class="w-5 h-0.5 bg-[#FAF4EC] block"></span>
+                <span class="w-5 h-0.5 bg-[#FAF4EC] block"></span>
+            </button>
+        </div>
+
+        <div id="mobile-menu" class="md:hidden flex-col gap-1 pb-4 px-5 border-t border-[#332D24] bg-[#181613]">
+            <a href="index.html" class="block py-2.5 text-sm text-[#B8B0A5] hover:text-[#D4AF37] font-semibold tracking-wider uppercase transition">Home</a>
+            <a href="gallery.html" class="block py-2.5 text-sm text-[#B8B0A5] hover:text-[#D4AF37] font-semibold tracking-wider uppercase transition">Gallery</a>
+            <a href="ibalong.html" class="block py-2.5 pl-4 text-xs text-[#B8B0A5] hover:text-[#D4AF37] tracking-wider uppercase transition">&mdash; Ibalong</a>
+            <a href="lamang.html"  class="block py-2.5 pl-4 text-xs text-[#B8B0A5] hover:text-[#D4AF37] tracking-wider uppercase transition">&mdash; Biag ni Lam-ang</a>
+            <a href="matrix.html" class="block py-2.5 text-sm text-[#B8B0A5] hover:text-[#D4AF37] font-semibold tracking-wider uppercase transition">Comparative Matrix</a>
+            <a href="research.html" class="block py-2.5 text-sm text-[#FAF4EC] hover:text-[#D4AF37] font-semibold tracking-wider uppercase transition">Research Paper</a>
+            <a href="about.html" class="block py-2.5 text-sm text-[#B8B0A5] hover:text-[#D4AF37] font-semibold tracking-wider uppercase transition">About Us</a>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <section class="py-16 px-6 max-w-5xl mx-auto w-full flex-grow">
+        <div class="text-center mb-12">
+            <span class="text-[10px] tracking-[0.2em] text-[#8B2626] font-bold uppercase">Research Hub</span>
+            <h1 class="font-cinzel text-4xl md:text-5xl font-black text-[#D4AF37] mt-2 gold-glow">Research Document</h1>
+            <div class="ornament mt-4 max-w-xs mx-auto"><span class="text-[#D4AF37] text-lg">&#10022;</span></div>
+            <p class="text-sm text-[#B8B0A5] mt-3 max-w-lg mx-auto">Access the complete, formatted academic study for Art Appreciation, including full translations and comparisons.</p>
+        </div>
+
+        <div class="bg-[#181613] border border-[#332D24] rounded-2xl overflow-hidden shadow-2xl">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-6 border-b border-[#332D24]">
+                <div>
+                    <h3 class="font-cinzel text-xl font-bold text-[#D4AF37]">Research Documentation Hub</h3>
+                    <p class="text-sm text-[#B8B0A5] mt-0.5">Complete academic writing, stanza breakdowns, and references.</p>
+                </div>
+                <div class="flex gap-3 flex-shrink-0">
+                    <a href="https://docs.google.com/document/d/1IhcXQc-7Jw935bRVZZzaIuoPU66uW-oy9SXhcwQ7Qdw/edit?usp=sharing" id="pdf-drive-link" target="_blank"
+                       class="px-5 py-2.5 rounded-lg bg-[#D4AF37] text-black text-xs font-bold hover:bg-[#c9a430] transition tracking-wider uppercase">
+                        Open in Drive &#8599;
+                    </a>
+                </div>
+            </div>
+
+            <div class="mx-6 mt-6 px-4 py-3 rounded-xl bg-[#0D0C0A] border border-[#332D24] flex items-start gap-3">
+                <span class="text-[#D4AF37] text-lg flex-shrink-0">&#128196;</span>
+                <div>
+                    <p class="text-sm font-semibold text-[#FAF4EC]">Embedded Google Document</p>
+                    <p class="text-xs text-[#B8B0A5] mt-0.5">
+                        Below is a live, interactive preview of your Google Document. If it doesn't load immediately, click <strong class="text-[#D4AF37]">Open in Drive</strong> to view the file directly.
+                    </p>
+                </div>
+            </div>
+
+            <div class="m-6 rounded-xl overflow-hidden border border-[#332D24] bg-[#0D0C0A]" style="height:620px; position:relative;">
+                <iframe id="pdf-iframe" src="https://docs.google.com/document/d/1IhcXQc-7Jw935bRVZZzaIuoPU66uW-oy9SXhcwQ7Qdw/preview" title="Epikong-Bayan Research Paper" class="w-full h-full" style="border:none; display:block;"></iframe>
+
+                <!-- Placeholder shown when no PDF src is set -->
+                <div id="pdf-placeholder" class="absolute inset-0 w-full h-full flex flex-col items-center justify-center gap-4 text-center px-6">
+                    <div class="w-16 h-20 border-2 border-[#D4AF37]/30 rounded-lg flex items-center justify-center">
+                        <span class="text-3xl">&#128220;</span>
+                    </div>
+                    <div>
+                        <p class="font-cinzel text-[#D4AF37] font-semibold mb-1">Embedded Document Loaded</p>
+                        <p class="text-sm text-[#B8B0A5]">Your document is linked and previewing. Click below if you prefer to open the document full screen.</p>
+                    </div>
+                    <a href="https://docs.google.com/document/d/1IhcXQc-7Jw935bRVZZzaIuoPU66uW-oy9SXhcwQ7Qdw/edit?usp=sharing" id="pdf-alt-link" target="_blank"
+                       class="px-5 py-2.5 rounded-lg bg-[#D4AF37] text-black text-sm font-bold hover:bg-[#c9a430] transition">
+                        Open Research Paper &#8599;
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-[#332D24] py-8 px-6" style="background:#0D0C0A;">
+        <div class="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-[#B8B0A5]/50 tracking-widest uppercase">
+            <p>&copy; 2026 Group 2 &middot; Art Appreciation &middot; Epikong-Bayan Digital Archive</p>
+            <div class="flex gap-4">
+                <a href="index.html" class="hover:text-[#D4AF37] transition">Home</a>
+                <a href="gallery.html" class="hover:text-[#D4AF37] transition">Gallery</a>
+                <a href="matrix.html" class="hover:text-[#D4AF37] transition">Matrix</a>
+                <a href="research.html" class="hover:text-[#D4AF37] transition">Research</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('open');
+        });
+        window.addEventListener('scroll', function() {
+            document.getElementById('header').style.boxShadow = window.scrollY > 40 ? '0 4px 30px rgba(0,0,0,.5)' : 'none';
+        });
+
+        // PDF Placeholder trigger
+        var pdfIframe      = document.getElementById('pdf-iframe');
+        var pdfPlaceholder = document.getElementById('pdf-placeholder');
+        if (!pdfIframe.getAttribute('src')) {
+            pdfIframe.style.display     = 'none';
+            pdfPlaceholder.style.display = 'flex';
+        } else {
+            pdfPlaceholder.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
