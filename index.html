@@ -233,6 +233,131 @@
             pointer-events: none;
             z-index: 0;
         }
+
+        /* ══ THEME TRANSITIONS ══ */
+        body { transition: background-color 0.8s ease, color 0.8s ease; }
+
+        /* Coastal theme overrides */
+        body.theme-coastal {
+            --canvas: #04111F;
+            --card: #071827;
+            --gold: #4DD9E0;
+            --bronze: #0E3249;
+            --red: #1A6EA8;
+            background-color: #04111F;
+        }
+        body.theme-coastal .spotlight {
+            background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(77,217,224,0.1) 0%, transparent 70%);
+        }
+        body.theme-coastal .gold-glow { text-shadow: 0 2px 20px rgba(77,217,224,0.4), 0 0 40px rgba(77,217,224,0.15); }
+        body.theme-coastal .qr-badge { border-color: #4DD9E0; }
+        body.theme-coastal ::-webkit-scrollbar-thumb { background: #0E3249; }
+
+        /* Forest theme overrides */
+        body.theme-forest {
+            --canvas: #040D06;
+            --card: #081409;
+            --gold: #7EC850;
+            --bronze: #163B1A;
+            --red: #2E6B30;
+            background-color: #040D06;
+        }
+        body.theme-forest .spotlight {
+            background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(126,200,80,0.1) 0%, transparent 70%);
+        }
+        body.theme-forest .gold-glow { text-shadow: 0 2px 20px rgba(126,200,80,0.4), 0 0 40px rgba(126,200,80,0.15); }
+        body.theme-forest .qr-badge { border-color: #7EC850; }
+        body.theme-forest ::-webkit-scrollbar-thumb { background: #163B1A; }
+
+        /* ══ THEME SWITCHER ══ */
+        #theme-fab {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 0.75rem;
+        }
+        #theme-btn {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            background: var(--card);
+            border: 1px solid rgba(212,175,55,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        #theme-btn:hover { transform: scale(1.1); border-color: var(--gold); }
+        #theme-panel {
+            background: rgba(13,12,10,0.95);
+            border: 1px solid rgba(212,175,55,0.2);
+            border-radius: 1rem;
+            padding: 1rem;
+            width: 13rem;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.7);
+            backdrop-filter: blur(16px);
+            display: none;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        #theme-panel.open { display: flex; }
+        .theme-option {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            padding: 0.6rem 0.75rem;
+            border-radius: 0.6rem;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: background 0.2s, border-color 0.2s;
+        }
+        .theme-option:hover { background: rgba(255,255,255,0.04); }
+        .theme-option.active { border-color: rgba(255,255,255,0.15); background: rgba(255,255,255,0.06); }
+        .theme-swatch {
+            width: 1.75rem;
+            height: 1.75rem;
+            border-radius: 50%;
+            flex-shrink: 0;
+            border: 2px solid rgba(255,255,255,0.15);
+        }
+        .theme-label { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #B8B0A5; }
+        .theme-sublabel { font-size: 0.6rem; color: rgba(184,176,165,0.5); margin-top: 1px; }
+        #sound-toggle {
+            margin-top: 0.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.5rem 0.75rem;
+            border-top: 1px solid rgba(255,255,255,0.07);
+        }
+        #sound-toggle span { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: #B8B0A5; }
+        #sound-pill {
+            width: 2.2rem;
+            height: 1.2rem;
+            border-radius: 9999px;
+            background: #332D24;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        #sound-pill.on { background: var(--gold); }
+        #sound-pill::after {
+            content: '';
+            position: absolute;
+            top: 2px; left: 2px;
+            width: 0.8rem; height: 0.8rem;
+            border-radius: 50%;
+            background: white;
+            transition: transform 0.3s;
+        }
+        #sound-pill.on::after { transform: translateX(1rem); }
     </style>
 </head>
 <body class="min-h-screen flex flex-col antialiased">
@@ -520,6 +645,44 @@
         </div>
     </footer>
 
+    <!-- ══ THEME SWITCHER WIDGET ══ -->
+    <div id="theme-fab">
+        <div id="theme-panel">
+            <p style="font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(184,176,165,0.5);margin-bottom:0.25rem;padding:0 0.25rem">Museum Atmosphere</p>
+
+            <div class="theme-option active" data-theme="classic" onclick="applyTheme('classic')">
+                <div class="theme-swatch" style="background:radial-gradient(circle at 40% 40%,#2a2518,#0D0C0A)"></div>
+                <div>
+                    <div class="theme-label">Classic Archive</div>
+                    <div class="theme-sublabel">Gold &amp; Darkness</div>
+                </div>
+            </div>
+
+            <div class="theme-option" data-theme="coastal" onclick="applyTheme('coastal')">
+                <div class="theme-swatch" style="background:radial-gradient(circle at 40% 40%,#0E3249,#04111F)"></div>
+                <div>
+                    <div class="theme-label">Coastal Tribe</div>
+                    <div class="theme-sublabel">Ocean &amp; Waves</div>
+                </div>
+            </div>
+
+            <div class="theme-option" data-theme="forest" onclick="applyTheme('forest')">
+                <div class="theme-swatch" style="background:radial-gradient(circle at 40% 40%,#163B1A,#040D06)"></div>
+                <div>
+                    <div class="theme-label">Ancient Forest</div>
+                    <div class="theme-sublabel">Jungle &amp; Fireflies</div>
+                </div>
+            </div>
+
+            <div id="sound-toggle">
+                <span>&#127925; Ambient Sound</span>
+                <div id="sound-pill" onclick="toggleSound()"></div>
+            </div>
+        </div>
+
+        <button id="theme-btn" onclick="toggleThemePanel()" title="Change museum theme">&#127912;</button>
+    </div>
+
 
     <!-- ═══ JAVASCRIPT ═══ -->
     <script>
@@ -589,27 +752,66 @@
             this.dx    = (Math.random() - 0.5) * 0.3;
             this.dy    = -this.speed;
         };
+        // particle colour driven by current theme
+        var particleColor = '#D4AF37';
+        var particleMode  = 'classic'; // classic | coastal | forest
+
         Particle.prototype.update = function() {
-            this.x += this.dx;
-            this.y += this.dy;
-            this.alpha -= 0.001;
+            this.x  += this.dx;
+            this.y  += this.dy;
+            this.alpha -= (particleMode === 'forest') ? 0.0006 : 0.001;
             if (this.y < -5 || this.alpha <= 0) this.reset();
         };
         Particle.prototype.draw = function() {
             ctx.save();
             ctx.globalAlpha = Math.max(0, this.alpha);
-            ctx.fillStyle   = '#D4AF37';
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-            ctx.fill();
+            if (particleMode === 'coastal') {
+                // wave-like horizontal drift
+                ctx.fillStyle = particleColor;
+                ctx.beginPath();
+                ctx.ellipse(this.x, this.y, this.r * 2, this.r * 0.6, Math.sin(Date.now()*0.001 + this.x) * 0.5, 0, Math.PI*2);
+                ctx.fill();
+            } else if (particleMode === 'forest') {
+                // firefly glow
+                var grad = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.r * 3);
+                grad.addColorStop(0, particleColor);
+                grad.addColorStop(1, 'transparent');
+                ctx.fillStyle = grad;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.r * 3, 0, Math.PI * 2);
+                ctx.fill();
+            } else {
+                ctx.fillStyle = particleColor;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+                ctx.fill();
+            }
             ctx.restore();
+        };
+
+        Particle.prototype.resetForMode = function() {
+            this.reset();
+            if (particleMode === 'coastal') {
+                // drift horizontally
+                this.dx = (Math.random() - 0.5) * 0.8;
+                this.dy = -Math.random() * 0.15 - 0.05;
+                this.r  = Math.random() * 1.5 + 0.5;
+            } else if (particleMode === 'forest') {
+                // slow floating fireflies
+                this.dx = (Math.random() - 0.5) * 0.4;
+                this.dy = -(Math.random() * 0.2 + 0.05);
+                this.r  = Math.random() * 2 + 1;
+                this.alpha = Math.random() * 0.7 + 0.1;
+            }
         };
 
         function initParticles() {
             particles = [];
-            for (var i = 0; i < 60; i++) {
+            var count = (particleMode === 'forest') ? 45 : 60;
+            for (var i = 0; i < count; i++) {
                 var p = new Particle();
                 p.y = Math.random() * canvas.height;
+                if (particleMode !== 'classic') p.resetForMode();
                 particles.push(p);
             }
         }
@@ -624,6 +826,144 @@
         resizeCanvas();
         initParticles();
         animateParticles();
+
+        // ── 7. THEME SWITCHER ──
+        var currentTheme = localStorage.getItem('epikong-theme') || 'classic';
+        var soundEnabled = false;
+        var audioCtx     = null;
+        var activeNodes  = [];
+
+        function stopAllSounds() {
+            activeNodes.forEach(function(n) {
+                try { if (n.stop) n.stop(); } catch(e) {}
+                try { if (n.disconnect) n.disconnect(); } catch(e) {}
+            });
+            activeNodes = [];
+        }
+
+        function makeNoise(ctx) {
+            var bufLen = ctx.sampleRate * 4;
+            var buf = ctx.createBuffer(1, bufLen, ctx.sampleRate);
+            var d = buf.getChannelData(0);
+            for (var i = 0; i < bufLen; i++) d[i] = Math.random() * 2 - 1;
+            var src = ctx.createBufferSource();
+            src.buffer = buf;
+            src.loop   = true;
+            return src;
+        }
+
+        function startOceanSound() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            var noise = makeNoise(audioCtx);
+            // low-pass → deep wave rumble
+            var lp = audioCtx.createBiquadFilter();
+            lp.type = 'lowpass'; lp.frequency.value = 600; lp.Q.value = 0.8;
+            // master gain with fade-in
+            var gain = audioCtx.createGain();
+            gain.gain.setValueAtTime(0, audioCtx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.18, audioCtx.currentTime + 3);
+            // LFO — wave rhythm
+            var lfo = audioCtx.createOscillator();
+            lfo.type = 'sine'; lfo.frequency.value = 0.13;
+            var lfoG = audioCtx.createGain(); lfoG.gain.value = 0.1;
+            lfo.connect(lfoG); lfoG.connect(gain.gain); lfo.start();
+            noise.connect(lp); lp.connect(gain); gain.connect(audioCtx.destination);
+            noise.start();
+            // second layer — higher surf hiss
+            var noise2 = makeNoise(audioCtx);
+            var hp = audioCtx.createBiquadFilter();
+            hp.type = 'highpass'; hp.frequency.value = 2000;
+            var gain2 = audioCtx.createGain();
+            gain2.gain.setValueAtTime(0, audioCtx.currentTime);
+            gain2.gain.linearRampToValueAtTime(0.04, audioCtx.currentTime + 4);
+            noise2.connect(hp); hp.connect(gain2); gain2.connect(audioCtx.destination);
+            noise2.start();
+            activeNodes.push(noise, lfo, noise2);
+        }
+
+        function startForestSound() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            // base jungle ambience — band-pass noise
+            var noise = makeNoise(audioCtx);
+            var bp = audioCtx.createBiquadFilter();
+            bp.type = 'bandpass'; bp.frequency.value = 800; bp.Q.value = 0.5;
+            var gain = audioCtx.createGain();
+            gain.gain.setValueAtTime(0, audioCtx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.10, audioCtx.currentTime + 2);
+            noise.connect(bp); bp.connect(gain); gain.connect(audioCtx.destination);
+            noise.start();
+            // periodic cricket chirps via oscillator burst
+            function chirp() {
+                if (!soundEnabled) return;
+                var osc = audioCtx.createOscillator();
+                var g   = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.value = 3800 + Math.random() * 800;
+                g.gain.setValueAtTime(0, audioCtx.currentTime);
+                g.gain.linearRampToValueAtTime(0.06, audioCtx.currentTime + 0.02);
+                g.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.12);
+                osc.connect(g); g.connect(audioCtx.destination);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.15);
+                setTimeout(chirp, 400 + Math.random() * 1200);
+            }
+            setTimeout(chirp, 1500);
+            activeNodes.push(noise);
+        }
+
+        function applyTheme(theme) {
+            currentTheme = theme;
+            localStorage.setItem('epikong-theme', theme);
+
+            // body classes
+            document.body.classList.remove('theme-coastal', 'theme-forest');
+            if (theme !== 'classic') document.body.classList.add('theme-' + theme);
+
+            // particle mode
+            if (theme === 'coastal') { particleColor = '#4DD9E0'; particleMode = 'coastal'; }
+            else if (theme === 'forest') { particleColor = '#7EC850'; particleMode = 'forest'; }
+            else { particleColor = '#D4AF37'; particleMode = 'classic'; }
+            initParticles();
+
+            // update active indicator
+            document.querySelectorAll('.theme-option').forEach(function(el) {
+                el.classList.toggle('active', el.getAttribute('data-theme') === theme);
+            });
+
+            // sound
+            stopAllSounds();
+            if (soundEnabled) {
+                if (theme === 'coastal') startOceanSound();
+                else if (theme === 'forest') startForestSound();
+            }
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            var pill = document.getElementById('sound-pill');
+            pill.classList.toggle('on', soundEnabled);
+            if (soundEnabled) {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                if (currentTheme === 'coastal') startOceanSound();
+                else if (currentTheme === 'forest') startForestSound();
+            } else {
+                stopAllSounds();
+            }
+        }
+
+        function toggleThemePanel() {
+            document.getElementById('theme-panel').classList.toggle('open');
+        }
+        // close panel when clicking outside
+        document.addEventListener('click', function(e) {
+            var fab = document.getElementById('theme-fab');
+            if (!fab.contains(e.target)) {
+                document.getElementById('theme-panel').classList.remove('open');
+            }
+        });
+
+        // restore saved theme on load
+        applyTheme(currentTheme);
 
         // ── 6. PDF PLACEHOLDER ──
         var pdfIframe      = document.getElementById('pdf-iframe');
