@@ -110,7 +110,8 @@
                 </div>
             </div>
 
-            <div class="mx-3 sm:mx-6 mt-4 sm:mt-6 px-4 py-3 rounded-xl bg-[#0D0C0A] border border-[#332D24] flex items-start gap-3">
+            <!-- Info Box (hidden on mobile, shown on desktop) -->
+            <div class="hidden md:flex mx-6 mt-6 px-4 py-3 rounded-xl bg-[#0D0C0A] border border-[#332D24] items-start gap-3">
                 <span class="text-[#D4AF37] text-lg flex-shrink-0">&#128196;</span>
                 <div>
                     <p class="text-sm font-semibold text-[#FAF4EC]">Embedded Google Document</p>
@@ -120,7 +121,8 @@
                 </div>
             </div>
 
-            <div class="m-3 sm:m-6 rounded-xl overflow-hidden border border-[#332D24] bg-[#0D0C0A]" style="height:620px; position:relative;">
+            <!-- Iframe Container (hidden on mobile, shown on desktop) -->
+            <div class="hidden md:block m-6 rounded-xl overflow-hidden border border-[#332D24] bg-[#0D0C0A]" style="height:620px; position:relative;">
                 <iframe id="pdf-iframe" src="https://docs.google.com/document/d/1IhcXQc-7Jw935bRVZZzaIuoPU66uW-oy9SXhcwQ7Qdw/preview" title="Epikong-Bayan Research Paper" class="w-full h-full" style="border:none; display:block;"></iframe>
 
                 <!-- Placeholder shown when no PDF src is set -->
@@ -132,11 +134,24 @@
                         <p class="font-cinzel text-[#D4AF37] font-semibold mb-1">Embedded Document Loaded</p>
                         <p class="text-sm text-[#B8B0A5]">Your document is linked and previewing. Click below if you prefer to open the document full screen.</p>
                     </div>
-                    <a href="https://docs.google.com/document/d/1IhcXQc-7Jw935bRVZZzaIuoPU66uW-oy9SXhcwQ7Qdw/edit?usp=sharing" id="pdf-alt-link" target="_blank"
-                       class="px-5 py-2.5 rounded-lg bg-[#D4AF37] text-black text-sm font-bold hover:bg-[#c9a430] transition">
-                        Open Research Paper &#8599;
-                    </a>
                 </div>
+            </div>
+
+            <!-- Mobile Optimized View (shown on mobile, hidden on desktop) -->
+            <div class="md:hidden p-8 text-center flex flex-col items-center justify-center gap-6">
+                <div class="w-16 h-16 rounded-full bg-[#8B2626]/20 border border-[#8B2626]/40 flex items-center justify-center text-[#D4AF37] text-2xl shadow-inner">
+                    &#128196;
+                </div>
+                <div>
+                    <h3 class="font-cinzel text-lg font-bold text-[#D4AF37]">Optimized Mobile Access</h3>
+                    <p class="text-xs text-[#B8B0A5] mt-2 max-w-xs mx-auto leading-relaxed">
+                        To read the full academic paper, translations, and comparative matrix cleanly on your phone, click below to open the official document.
+                    </p>
+                </div>
+                <a href="https://docs.google.com/document/d/1IhcXQc-7Jw935bRVZZzaIuoPU66uW-oy9SXhcwQ7Qdw/edit?usp=sharing" target="_blank"
+                   class="w-full py-3.5 rounded-xl bg-[#D4AF37] text-black text-xs font-black hover:bg-[#c9a430] transition tracking-widest uppercase shadow-lg shadow-[#D4AF37]/15">
+                    Open Document in Drive &rarr;
+                </a>
             </div>
         </div>
     </section>
