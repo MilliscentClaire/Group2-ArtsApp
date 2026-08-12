@@ -1,4 +1,4 @@
-// ══ EPIKONG-BAYAN THEME & WAR DRUMS ENGINE ══
+// ══ EPIKONG-BAYAN THEME, BACKGROUND PARTICLES & WAR DRUMS ENGINE ══
 (function() {
     // 1. Inject Theme CSS
     var style = document.createElement('style');
@@ -25,6 +25,16 @@
         }
         body.theme-forest .spotlight { background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(126,200,80,0.1) 0%, transparent 70%) !important; }
         body.theme-forest .gold-glow { text-shadow: 0 2px 20px rgba(126,200,80,0.4), 0 0 40px rgba(126,200,80,0.15) !important; }
+
+        #epik-global-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+        }
 
         #theme-fab {
             position: fixed;
@@ -56,7 +66,7 @@
             border: 1px solid rgba(212,175,55,0.2);
             border-radius: 1rem;
             padding: 1rem;
-            width: 13rem;
+            width: 13.5rem;
             box-shadow: 0 8px 40px rgba(0,0,0,0.7);
             backdrop-filter: blur(16px);
             display: none;
@@ -117,8 +127,106 @@
     `;
     document.head.appendChild(style);
 
-    // 2. Inject FAB UI
+    // Variables
+    var currentTheme = localStorage.getItem('epikong-theme') || 'classic';
+    var soundEnabled = localStorage.getItem('epikong-sound') === 'true';
+    var audioCtx = null;
+    var drumInterval = null;
+
+    var bgCanvas = null;
+    var bgCtx = null;
+    var bgParticles = [];
+    var particleColor = '#D4AF37';
+
+    // 2. Full-Screen Canvas Engine
+    function initGlobalCanvas() {
+        if (!document.body) return;
+        bgCanvas = document.getElementById('epik-global-canvas');
+        if (!bgCanvas) {
+            bgCanvas = document.createElement('canvas');
+            bgCanvas.id = 'epik-global-canvas';
+            document.body.appendChild(bgCanvas);
+        }
+        bgCtx = bgCanvas.getContext('2d');
+        resizeBgCanvas();
+        createParticles();
+        requestAnimationFrame(renderParticles);
+    }
+
+    function resizeBgCanvas() {
+        if (!bgCanvas) return;
+        bgCanvas.width = window.innerWidth;
+        bgCanvas.height = window.innerHeight;
+    }
+
+    function Particle() { this.reset(); }
+    Particle.prototype.reset = function() {
+        this.x = Math.random() * (bgCanvas ? bgCanvas.width : window.innerWidth);
+        this.y = Math.random() * (bgCanvas ? bgCanvas.height : window.innerHeight);
+        this.r = Math.random() * 1.5 + 0.4;
+        this.alpha = Math.random() * 0.5 + 0.1;
+        this.speed = Math.random() * 0.4 + 0.1;
+        this.dx = (Math.random() - 0.5) * 0.4;
+        this.dy = -this.speed;
+    };
+    Particle.prototype.update = function() {
+        this.x += this.dx;
+        this.y += this.dy;
+        this.alpha -= 0.0008;
+        if (this.y < -10 || this.x < -10 || this.x > (bgCanvas ? bgCanvas.width : window.innerWidth) + 10 || this.alpha <= 0) {
+            this.reset();
+            this.y = (bgCanvas ? bgCanvas.height : window.innerHeight) + 5;
+        }
+    };
+    Particle.prototype.draw = function() {
+        if (!bgCtx) return;
+        bgCtx.save();
+        bgCtx.globalAlpha = Math.max(0, this.alpha);
+        if (currentTheme === 'coastal') {
+            bgCtx.fillStyle = particleColor;
+            bgCtx.beginPath();
+            bgCtx.ellipse(this.x, this.y, this.r * 2.5, this.r * 0.8, Math.sin(Date.now() * 0.001 + this.x) * 0.5, 0, Math.PI * 2);
+            bgCtx.fill();
+        } else if (currentTheme === 'forest') {
+            var grad = bgCtx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.r * 3.5);
+            grad.addColorStop(0, particleColor);
+            grad.addColorStop(1, 'transparent');
+            bgCtx.fillStyle = grad;
+            bgCtx.beginPath();
+            bgCtx.arc(this.x, this.y, this.r * 3.5, 0, Math.PI * 2);
+            bgCtx.fill();
+        } else {
+            bgCtx.fillStyle = particleColor;
+            bgCtx.beginPath();
+            bgCtx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+            bgCtx.fill();
+        }
+        bgCtx.restore();
+    };
+
+    function createParticles() {
+        bgParticles = [];
+        for (var i = 0; i < 55; i++) {
+            bgParticles.push(new Particle());
+        }
+    }
+
+    function renderParticles() {
+        if (bgCtx && bgCanvas) {
+            bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+            bgParticles.forEach(function(p) { p.update(); p.draw(); });
+        }
+        requestAnimationFrame(renderParticles);
+    }
+
+    window.addEventListener('resize', function() {
+        resizeBgCanvas();
+    });
+
+    // 3. Inject FAB UI
     document.addEventListener('DOMContentLoaded', function() {
+        initGlobalCanvas();
+
         var fab = document.createElement('div');
         fab.id = 'theme-fab';
         fab.innerHTML = `
@@ -151,7 +259,7 @@
 
                 <div id="sound-toggle">
                     <span>&#127925; Tribal War Drums</span>
-                    <div id="sound-pill" onclick="window.toggleEpikSound()"></div>
+                    <div id="sound-pill" class="${soundEnabled ? 'on' : ''}" onclick="window.toggleEpikSound()"></div>
                 </div>
             </div>
 
@@ -159,30 +267,35 @@
         `;
         document.body.appendChild(fab);
 
-        // Restore saved theme on DOM ready
         window.applyEpikTheme(currentTheme);
     });
 
-    // 3. Audio & Theme Logic
-    var currentTheme = localStorage.getItem('epikong-theme') || 'classic';
-    var soundEnabled = localStorage.getItem('epikong-sound') === 'true';
-    var audioCtx = null;
-    var drumInterval = null;
-
+    // 4. Audio Engine: Clear Audible Tribal War Drums Synthesizer
     function stopAllSounds() {
         if (drumInterval) { clearInterval(drumInterval); drumInterval = null; }
     }
 
-    function playWarDrumHit(freq, duration, gainVal, isNoise) {
+    function initAudioContext() {
+        if (!audioCtx) {
+            var AudioContextClass = window.AudioContext || window.webkitAudioContext;
+            if (AudioContextClass) audioCtx = new AudioContextClass();
+        }
+        if (audioCtx && audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+    }
+
+    function playWarDrumHit(freq, duration, gainVal, hasImpact) {
         if (!audioCtx || !soundEnabled) return;
         var now = audioCtx.currentTime;
 
+        // Primary Bass/Body Oscillator
         var osc = audioCtx.createOscillator();
         var gain = audioCtx.createGain();
 
         osc.type = 'sine';
         osc.frequency.setValueAtTime(freq, now);
-        osc.frequency.exponentialRampToValueAtTime(freq * 0.3, now + duration);
+        osc.frequency.exponentialRampToValueAtTime(Math.max(30, freq * 0.25), now + duration);
 
         gain.gain.setValueAtTime(gainVal, now);
         gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
@@ -193,22 +306,36 @@
         osc.start(now);
         osc.stop(now + duration);
 
-        if (isNoise) {
-            var bufLen = audioCtx.sampleRate * 0.05;
+        // Secondary Harmonic Pitch for wooden drumhead resonance
+        var osc2 = audioCtx.createOscillator();
+        var gain2 = audioCtx.createGain();
+        osc2.type = 'triangle';
+        osc2.frequency.setValueAtTime(freq * 1.5, now);
+        osc2.frequency.exponentialRampToValueAtTime(40, now + (duration * 0.6));
+        gain2.gain.setValueAtTime(gainVal * 0.4, now);
+        gain2.gain.exponentialRampToValueAtTime(0.0001, now + (duration * 0.6));
+        osc2.connect(gain2);
+        gain2.connect(audioCtx.destination);
+        osc2.start(now);
+        osc2.stop(now + (duration * 0.6));
+
+        // Noise Burst for drumhead skin slap
+        if (hasImpact) {
+            var bufLen = Math.floor(audioCtx.sampleRate * 0.04);
             var buf = audioCtx.createBuffer(1, bufLen, audioCtx.sampleRate);
             var d = buf.getChannelData(0);
-            for (var i = 0; i < bufLen; i++) d[i] = (Math.random() * 2 - 1) * 0.3;
+            for (var i = 0; i < bufLen; i++) d[i] = (Math.random() * 2 - 1);
 
             var noiseSrc = audioCtx.createBufferSource();
             noiseSrc.buffer = buf;
 
             var filter = audioCtx.createBiquadFilter();
             filter.type = 'lowpass';
-            filter.frequency.value = 400;
+            filter.frequency.value = 500;
 
             var noiseGain = audioCtx.createGain();
-            noiseGain.gain.setValueAtTime(gainVal * 0.4, now);
-            noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.05);
+            noiseGain.gain.setValueAtTime(gainVal * 0.5, now);
+            noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.04);
 
             noiseSrc.connect(filter);
             filter.connect(noiseGain);
@@ -219,27 +346,31 @@
     }
 
     function startWarDrumsSound() {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        initAudioContext();
         stopAllSounds();
+        if (!soundEnabled) return;
 
         var step = 0;
+        // Rhythmic Dabakan Tribal War Drum Pattern (8-beat loop)
         var pattern = [
-            { freq: 85, duration: 0.6, gain: 0.18, noise: true },
-            null,
-            { freq: 140, duration: 0.3, gain: 0.08, noise: false },
-            { freq: 110, duration: 0.4, gain: 0.12, noise: true },
-            { freq: 85, duration: 0.5, gain: 0.15, noise: true },
-            null,
-            { freq: 160, duration: 0.25, gain: 0.07, noise: false },
-            { freq: 130, duration: 0.35, gain: 0.09, noise: true }
+            { freq: 110, duration: 0.55, gain: 0.35, impact: true },  // Heavy Dabakan Low Bass
+            null,                                                    // Rest
+            { freq: 180, duration: 0.25, gain: 0.18, impact: false },// Mid Tap
+            { freq: 140, duration: 0.35, gain: 0.25, impact: true }, // Accent Rim Hit
+            { freq: 100, duration: 0.50, gain: 0.30, impact: true },  // Heavy Secondary Bass
+            null,                                                    // Rest
+            { freq: 210, duration: 0.20, gain: 0.15, impact: false },// Light Wood Tap
+            { freq: 160, duration: 0.30, gain: 0.22, impact: true }  // Pickup Strike
         ];
 
         drumInterval = setInterval(function() {
             if (!soundEnabled) return;
             var hit = pattern[step % pattern.length];
-            if (hit) playWarDrumHit(hit.freq, hit.duration, hit.gain, hit.noise);
+            if (hit) {
+                playWarDrumHit(hit.freq, hit.duration, hit.gain, hit.impact);
+            }
             step++;
-        }, 360);
+        }, 340); // Energetic ~88 BPM Tribal Tempo
     }
 
     window.applyEpikTheme = function(theme) {
@@ -249,13 +380,13 @@
         document.body.classList.remove('theme-coastal', 'theme-forest');
         if (theme !== 'classic') document.body.classList.add('theme-' + theme);
 
+        if (theme === 'coastal') particleColor = '#4DD9E0';
+        else if (theme === 'forest') particleColor = '#7EC850';
+        else particleColor = '#D4AF37';
+
         document.querySelectorAll('.theme-option').forEach(function(el) {
             el.classList.toggle('active', el.getAttribute('data-theme') === theme);
         });
-
-        if (window.onEpikThemeChange) {
-            window.onEpikThemeChange(theme);
-        }
 
         if (soundEnabled) {
             startWarDrumsSound();
@@ -265,13 +396,13 @@
     };
 
     window.toggleEpikSound = function() {
+        initAudioContext();
         soundEnabled = !soundEnabled;
         localStorage.setItem('epikong-sound', soundEnabled);
         var pill = document.getElementById('sound-pill');
         if (pill) pill.classList.toggle('on', soundEnabled);
+
         if (soundEnabled) {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            if (audioCtx.state === 'suspended') audioCtx.resume();
             startWarDrumsSound();
         } else {
             stopAllSounds();
@@ -279,6 +410,7 @@
     };
 
     window.toggleEpikThemePanel = function() {
+        initAudioContext();
         var panel = document.getElementById('theme-panel');
         if (panel) panel.classList.toggle('open');
     };
@@ -291,7 +423,7 @@
         }
     });
 
-    // Apply immediate class to body before render to avoid flash
+    // Set immediate body class to avoid flash
     if (currentTheme !== 'classic') {
         document.body.classList.add('theme-' + currentTheme);
     }
