@@ -833,7 +833,10 @@
         var audioCtx     = null;
         var activeNodes  = [];
 
+        var drumInterval = null;
+
         function stopAllSounds() {
+            if (drumInterval) { clearInterval(drumInterval); drumInterval = null; }
             activeNodes.forEach(function(n) {
                 try { if (n.stop) n.stop(); } catch(e) {}
                 try { if (n.disconnect) n.disconnect(); } catch(e) {}
@@ -841,73 +844,86 @@
             activeNodes = [];
         }
 
-        function makeNoise(ctx) {
-            var bufLen = ctx.sampleRate * 4;
-            var buf = ctx.createBuffer(1, bufLen, ctx.sampleRate);
-            var d = buf.getChannelData(0);
-            for (var i = 0; i < bufLen; i++) d[i] = Math.random() * 2 - 1;
-            var src = ctx.createBufferSource();
-            src.buffer = buf;
-            src.loop   = true;
-            return src;
+        function playWarDrumHit(freq, duration, gainVal, isNoise) {
+            if (!audioCtx || !soundEnabled) return;
+            var now = audioCtx.currentTime;
+
+            // Oscillator for low wooden drum body tone
+            var osc = audioCtx.createOscillator();
+            var gain = audioCtx.createGain();
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now);
+            osc.frequency.exponentialRampToValueAtTime(freq * 0.3, now + duration);
+
+            gain.gain.setValueAtTime(gainVal, now);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start(now);
+            osc.stop(now + duration);
+
+            // Optional punchy noise burst for drumhead impact
+            if (isNoise) {
+                var bufLen = audioCtx.sampleRate * 0.05;
+                var buf = audioCtx.createBuffer(1, bufLen, audioCtx.sampleRate);
+                var d = buf.getChannelData(0);
+                for (var i = 0; i < bufLen; i++) d[i] = (Math.random() * 2 - 1) * 0.3;
+
+                var noiseSrc = audioCtx.createBufferSource();
+                noiseSrc.buffer = buf;
+
+                var filter = audioCtx.createBiquadFilter();
+                filter.type = 'lowpass';
+                filter.frequency.value = 400;
+
+                var noiseGain = audioCtx.createGain();
+                noiseGain.gain.setValueAtTime(gainVal * 0.4, now);
+                noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.05);
+
+                noiseSrc.connect(filter);
+                filter.connect(noiseGain);
+                noiseGain.connect(audioCtx.destination);
+
+                noiseSrc.start(now);
+            }
+        }
+
+        function startWarDrumsSound() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            stopAllSounds();
+
+            // Tribal drum rhythm pattern (8-step loop)
+            var step = 0;
+            var pattern = [
+                { freq: 85, duration: 0.6, gain: 0.18, noise: true },  // Heavy Main Beat (Dabakan)
+                null,                                                  // Rest
+                { freq: 140, duration: 0.3, gain: 0.08, noise: false }, // Soft Mid Tap
+                { freq: 110, duration: 0.4, gain: 0.12, noise: true },  // Accent Beat
+                { freq: 85, duration: 0.5, gain: 0.15, noise: true },  // Secondary Heavy
+                null,                                                  // Rest
+                { freq: 160, duration: 0.25, gain: 0.07, noise: false },// Light Wood Tap
+                { freq: 130, duration: 0.35, gain: 0.09, noise: true }  // Pickup Hit
+            ];
+
+            drumInterval = setInterval(function() {
+                if (!soundEnabled) return;
+                var hit = pattern[step % pattern.length];
+                if (hit) {
+                    playWarDrumHit(hit.freq, hit.duration, hit.gain, hit.noise);
+                }
+                step++;
+            }, 360); // ~83 BPM ambient tempo
         }
 
         function startOceanSound() {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            var noise = makeNoise(audioCtx);
-            // low-pass → deep wave rumble
-            var lp = audioCtx.createBiquadFilter();
-            lp.type = 'lowpass'; lp.frequency.value = 600; lp.Q.value = 0.8;
-            // master gain with fade-in
-            var gain = audioCtx.createGain();
-            gain.gain.setValueAtTime(0, audioCtx.currentTime);
-            gain.gain.linearRampToValueAtTime(0.18, audioCtx.currentTime + 3);
-            // LFO — wave rhythm
-            var lfo = audioCtx.createOscillator();
-            lfo.type = 'sine'; lfo.frequency.value = 0.13;
-            var lfoG = audioCtx.createGain(); lfoG.gain.value = 0.1;
-            lfo.connect(lfoG); lfoG.connect(gain.gain); lfo.start();
-            noise.connect(lp); lp.connect(gain); gain.connect(audioCtx.destination);
-            noise.start();
-            // second layer — higher surf hiss
-            var noise2 = makeNoise(audioCtx);
-            var hp = audioCtx.createBiquadFilter();
-            hp.type = 'highpass'; hp.frequency.value = 2000;
-            var gain2 = audioCtx.createGain();
-            gain2.gain.setValueAtTime(0, audioCtx.currentTime);
-            gain2.gain.linearRampToValueAtTime(0.04, audioCtx.currentTime + 4);
-            noise2.connect(hp); hp.connect(gain2); gain2.connect(audioCtx.destination);
-            noise2.start();
-            activeNodes.push(noise, lfo, noise2);
+            startWarDrumsSound();
         }
 
         function startForestSound() {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            // base jungle ambience — band-pass noise
-            var noise = makeNoise(audioCtx);
-            var bp = audioCtx.createBiquadFilter();
-            bp.type = 'bandpass'; bp.frequency.value = 800; bp.Q.value = 0.5;
-            var gain = audioCtx.createGain();
-            gain.gain.setValueAtTime(0, audioCtx.currentTime);
-            gain.gain.linearRampToValueAtTime(0.10, audioCtx.currentTime + 2);
-            noise.connect(bp); bp.connect(gain); gain.connect(audioCtx.destination);
-            noise.start();
-            // periodic cricket chirps via oscillator burst
-            function chirp() {
-                if (!soundEnabled) return;
-                var osc = audioCtx.createOscillator();
-                var g   = audioCtx.createGain();
-                osc.type = 'sine';
-                osc.frequency.value = 3800 + Math.random() * 800;
-                g.gain.setValueAtTime(0, audioCtx.currentTime);
-                g.gain.linearRampToValueAtTime(0.06, audioCtx.currentTime + 0.02);
-                g.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.12);
-                osc.connect(g); g.connect(audioCtx.destination);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.15);
-                setTimeout(chirp, 400 + Math.random() * 1200);
-            }
-            setTimeout(chirp, 1500);
-            activeNodes.push(noise);
+            startWarDrumsSound();
         }
 
         function applyTheme(theme) {
@@ -930,10 +946,10 @@
             });
 
             // sound
-            stopAllSounds();
             if (soundEnabled) {
-                if (theme === 'coastal') startOceanSound();
-                else if (theme === 'forest') startForestSound();
+                startWarDrumsSound();
+            } else {
+                stopAllSounds();
             }
         }
 
@@ -944,8 +960,7 @@
             if (soundEnabled) {
                 if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 if (audioCtx.state === 'suspended') audioCtx.resume();
-                if (currentTheme === 'coastal') startOceanSound();
-                else if (currentTheme === 'forest') startForestSound();
+                startWarDrumsSound();
             } else {
                 stopAllSounds();
             }
